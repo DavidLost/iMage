@@ -39,6 +39,7 @@ target/
 *.iml
 *.eml
 /out/
+target
 
 # Mac
 .DS_Store

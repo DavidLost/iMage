@@ -9,15 +9,16 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>jmjrst.main</artifactId>
+    <artifactId>2375486</artifactId>
+    <groupId>swt1.ub1.a1</groupId>
     <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>15</source>
-                    <target>15</target>
+                    <source>16</source>
+                    <target>16</target>
                 </configuration>
             </plugin>
             <plugin>
@@ -26,7 +27,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <addClassPath>true</addClassPath>
+                            <addClasspath>true</addClasspath>
                             <mainClass>org.jis.Main</mainClass>
                         </manifest>
                     </archive>
