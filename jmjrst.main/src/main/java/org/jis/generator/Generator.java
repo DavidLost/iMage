@@ -182,7 +182,6 @@ public class Generator {
 
       File[] dir = new File[0];
       // generate only selected Images or the whole directory?
-      //System.out.println("must be null now!!!!!");
       if (m.list.getSelectedValues().size() == 0)
         dir = m.list.getPictures();
       else if (m.list.getSelectedValues().size() > 0 && m.list.getSelectedValues().size() < m.list

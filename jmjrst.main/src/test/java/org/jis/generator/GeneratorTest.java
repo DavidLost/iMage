@@ -2,6 +2,8 @@ package org.jis.generator;
 
 import org.jis.options.Options;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import javax.imageio.*;
 import javax.imageio.metadata.IIOMetadata;
@@ -19,6 +21,7 @@ import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@ExtendWith(MockitoExtension.class)
 public class GeneratorTest {
   /**
    * Class under test.
@@ -64,7 +67,7 @@ public class GeneratorTest {
     this.testImage = null;
     this.imeta = null;
     this.rotatedImageTestResult = null;
-    
+    System.out.println(this.getClass().getResource(IMAGE_FILE));
     final URL imageResource = this.getClass().getResource(IMAGE_FILE);
     imageName = extractFileNameWithoutExtension(new File(imageResource.getFile()));
    
