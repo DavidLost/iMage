@@ -182,6 +182,7 @@ public class Generator {
 
       File[] dir = new File[0];
       // generate only selected Images or the whole directory?
+      //System.out.println("must be null now!!!!!");
       if (m.list.getSelectedValues().size() == 0)
         dir = m.list.getPictures();
       else if (m.list.getSelectedValues().size() > 0 && m.list.getSelectedValues().size() < m.list
@@ -280,9 +281,7 @@ public class Generator {
    * scale the Image and write it to a specified Directory or File
    * </p>
    *
-   * @param file
-   * 		String, filename for the outputimage
-   * @param image
+   * @param imageFile
    * 		Image, the input image
    * @param iout
    * 		File, the directory or file for the scaled image

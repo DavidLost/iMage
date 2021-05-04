@@ -9,8 +9,8 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>2375486</artifactId>
-    <groupId>swt1.ub1.a1</groupId>
+    <artifactId>jmjrst.main</artifactId>
+    <groupId>swt1</groupId>
     <build>
         <plugins>
             <plugin>
@@ -40,5 +40,19 @@
         <maven.compiler.source>16</maven.compiler.source>
         <maven.compiler.target>16</maven.compiler.target>
     </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.7.1</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
 
 </project>
