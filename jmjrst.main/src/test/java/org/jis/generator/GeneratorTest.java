@@ -67,7 +67,6 @@ public class GeneratorTest {
     this.testImage = null;
     this.imeta = null;
     this.rotatedImageTestResult = null;
-    System.out.println(this.getClass().getResource(IMAGE_FILE));
     final URL imageResource = this.getClass().getResource(IMAGE_FILE);
     imageName = extractFileNameWithoutExtension(new File(imageResource.getFile()));
    
@@ -234,7 +233,6 @@ public class GeneratorTest {
   @Test
   public void testGenerateImage_Scale2() throws IOException {
     final URL imageResource = this.getClass().getResource(IMAGE_FILE);
-    assertNotNull(imageResource);
     File imageFile = new File(imageResource.getFile());
     File out = this.generator.generateImage(imageFile, TEST_DIR, true, imageWidth*2, imageHeight * 2, "2_times_scaled_");
     BufferedImage scaledImageResult = ImageIO.read(out);
@@ -267,6 +265,15 @@ public class GeneratorTest {
     assertThrows(NullPointerException.class, () -> {
       this.generator.generate(false);
     });
+  }
+
+  @Test
+  public void testCreateZip() {
+    File testFile = new File("trololol.zip");
+    if (testFile.exists()) testFile.delete();
+    this.generator.createZip(testFile, new Vector<>());
+    assertTrue(testFile.exists());
+    testFile.delete();
   }
 
   @Disabled
