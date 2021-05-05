@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.Random;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.opentest4j.AssertionFailedError;
 
@@ -26,7 +27,7 @@ class StringUtilsTest {
 		return RandomStringUtils.randomAlphanumeric(1, 10000000);
 	}
 
-	class AbbreviateParameters {
+	static class AbbreviateParameters {
 		String str;
 		int maxWidth;
 		public AbbreviateParameters(String str, int maxWidth) {
@@ -87,5 +88,40 @@ class StringUtilsTest {
 			fail(params.generateErrorMessage());
 		}
 	}
-		
+
+	@Test
+	public void testAbbreviate_null_rand() {
+		randomInt = randomNumbers.next();
+		params = new AbbreviateParameters(null, randomInt);
+		try {
+			assertNull(StringUtils.abbreviate(params.str, params.maxWidth));
+		} catch (AssertionFailedError afe) {
+			fail(params.generateErrorMessage());
+		}
+	}
+
+	@Disabled
+	public void testAbbreviate_randString_1() {
+		randomString = getRandomString();
+		params = new AbbreviateParameters(randomString, 0);
+		try {
+			assertEquals(StringUtils.abbreviate(params.str, params.maxWidth), "");
+		} catch (AssertionFailedError afe) {
+			fail(params.generateErrorMessage());
+		}
+	}
+
+	@Test
+	public void testAbbreviate_randString_rand() {
+		randomString = getRandomString();
+		randomInt = randomNumbers.next();
+		params = new AbbreviateParameters(randomString, randomInt);
+		String result = "";
+		try {
+			result = StringUtils.abbreviate(params.str, params.maxWidth);
+		} catch (IllegalArgumentException ignored) { }
+		assertNotNull(result);
+		assert result.length() <= randomInt;
+	}
+
 }
