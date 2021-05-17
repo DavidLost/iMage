@@ -234,7 +234,7 @@ public class GeneratorTest {
   public void testGenerateImage_Scale2() throws IOException {
     final URL imageResource = this.getClass().getResource(IMAGE_FILE);
     File imageFile = new File(imageResource.getFile());
-    File out = this.generator.generateImage(imageFile, TEST_DIR, true, imageWidth*2, imageHeight * 2, "2_times_scaled_");
+    File out = this.generator.generateImage(imageFile, TEST_DIR, true, imageWidth * 2, imageHeight * 2, "2_times_scaled_");
     BufferedImage scaledImageResult = ImageIO.read(out);
     assertEquals(scaledImageResult.getWidth(), imageWidth * 2);
     assertEquals(scaledImageResult.getHeight(), imageHeight * 2);
