@@ -29,8 +29,9 @@ public class ChromaKeying implements Keying {
    * @throws IllegalArgumentException if the distance is negative
    */
   public ChromaKeying(String keyRepresentation, double distance) {
-    //throw new RuntimeException("to be implemented");
-
+    if (!keyRepresentation.startsWith("#")) {
+      throw new IllegalArgumentException("color key representation has to start with: #");
+    }
     new ChromaKeying(Color.decode(keyRepresentation), distance);
   }
 
@@ -42,8 +43,9 @@ public class ChromaKeying implements Keying {
    * @throws IllegalArgumentException if the distance is negative
    */
   public ChromaKeying(Color key, double distance) {
-    //throw new RuntimeException("to be implemented");
-
+    if (distance < 0) {
+      throw new IllegalArgumentException("distance can't be negative!");
+    }
     this.key = key;
     this.distance = distance;
   }
@@ -57,7 +59,14 @@ public class ChromaKeying implements Keying {
    */
   @Override
   public ScreenImage process(ScreenImage image) {
-    throw new RuntimeException("to be implemented");
+    for (int x = 0; x < image.getWidth(); x++) {
+      for (int y = 0; y < image.getHeight(); y++) {
+        if (colorDistance(new Color(image.getColor(x, y)), key) <= distance) {
+          image.setColor(Color.TRANSLUCENT, x, y);
+        }
+      }
+    }
+    return image;
   }
 
   /**
@@ -68,7 +77,14 @@ public class ChromaKeying implements Keying {
    * @return euclidean distance between two colors in the RGBA color space
    */
   protected double colorDistance(Color a, Color b) {
-    throw new RuntimeException("to be implemented");
+    return Math.sqrt(nativeSquare(a.getRed() - b.getRed())
+            + nativeSquare(a.getGreen() - b.getGreen())
+            + nativeSquare(a.getBlue() - b.getBlue())
+    );
+  }
+
+  private int nativeSquare(int a) {
+    return a * a;
   }
 
   /**
@@ -77,6 +93,6 @@ public class ChromaKeying implements Keying {
    * @return color key
    */
   public Color getKey() {
-    throw new RuntimeException("to be implemented");
+    return key;
   }
 }
