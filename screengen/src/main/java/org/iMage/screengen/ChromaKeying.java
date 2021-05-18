@@ -15,8 +15,8 @@ import java.awt.Color;
  */
 public class ChromaKeying implements Keying {
 
-  private Color key;
-  private double distance;
+  private final Color key;
+  private final double distance;
 
   /**
    * Create a new chroma keying process.
@@ -32,7 +32,15 @@ public class ChromaKeying implements Keying {
     if (!keyRepresentation.startsWith("#")) {
       throw new IllegalArgumentException("color key representation has to start with: #");
     }
-    new ChromaKeying(Color.decode(keyRepresentation), distance);
+    if (distance < 0) {
+      throw new IllegalArgumentException("distance can't be negative!");
+    }
+    try {
+      this.key = Color.decode(keyRepresentation);
+    } catch (NumberFormatException nfe) {
+      throw new IllegalArgumentException("invalid color key representation!");
+    }
+    this.distance = distance;
   }
 
   /**
@@ -61,8 +69,8 @@ public class ChromaKeying implements Keying {
   public ScreenImage process(ScreenImage image) {
     for (int x = 0; x < image.getWidth(); x++) {
       for (int y = 0; y < image.getHeight(); y++) {
-        if (colorDistance(new Color(image.getColor(x, y)), key) <= distance) {
-          image.setColor(x, y, Color.TRANSLUCENT);
+        if (colorDistance(new Color(image.getColor(x, y)), getKey()) <= distance) {
+          image.setColor(x, y, ScreenImage.TRANSPARENT_ALPHA_CHANNEL);
         }
       }
     }
@@ -94,5 +102,9 @@ public class ChromaKeying implements Keying {
    */
   public Color getKey() {
     return key;
+  }
+
+  public double getDistance() {
+    return distance;
   }
 }

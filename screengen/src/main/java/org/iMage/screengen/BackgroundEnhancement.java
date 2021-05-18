@@ -3,13 +3,8 @@ package org.iMage.screengen;
 import org.iMage.screengen.base.Position;
 import org.iMage.screengen.base.ScreenImage;
 import org.iMage.screengen.base.ScreenImageEnhancement;
-import org.iMage.screengen.positions.CenterPosition;
-import org.iMage.screengen.positions.LowerCenterPosition;
-import org.iMage.screengen.positions.UpperLeftCornerPosition;
-import org.iMage.screengen.positions.UpperRightCornerPosition;
 
-import java.awt.*;
-import java.io.IOException;
+import java.awt.Point;
 
 /**
  * The {@link BackgroundEnhancement} adds a background to the base image.
@@ -60,11 +55,11 @@ public class BackgroundEnhancement implements ScreenImageEnhancement {
     ScreenImage backgroundCopy = background.copy();
     for (int x = 0; x < baseImage.getWidth(); x++) {
       for (int y = 0; y < baseImage.getHeight(); y++) {
-        if (baseImage.getColor(x, y) != Color.TRANSLUCENT) {
+        if (baseImage.getColor(x, y) != ScreenImage.TRANSPARENT_ALPHA_CHANNEL) {
           backgroundCopy.setColor(startPos.x + x, startPos.y + y, baseImage.getColor(x, y));
         }
       }
     }
-    return baseImage;
+    return backgroundCopy;
   }
 }

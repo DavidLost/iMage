@@ -18,6 +18,7 @@ import java.awt.Point;
  */
 public class CenterPosition extends Position {
 
+
   /**
    * Create a new center position.
    */
