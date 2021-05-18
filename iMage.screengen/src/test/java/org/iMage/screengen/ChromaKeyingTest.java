@@ -32,12 +32,12 @@ public class ChromaKeyingTest {
      * transparent and comparing the result to the actual transparent-set pixels.
      */
     @Test
-    public void testProcess() throws IOException, ClassNotFoundException {
+    public void testProcess() throws ClassNotFoundException {
         ScreenImage image = ResourceLoader.loadImageResource(
                 this.getClass().getName(), ResourceLoader.FOREGROUND_IMAGE_FILE);
         assertNotNull(image);
         int pixelCounterBefore = getEqualPixelCounter(image, chromaKeying.getKey(), chromaKeying.getDistance());
-        chromaKeying.process(image);
+        image = chromaKeying.process(image);
         int pixelCounterAfter = getEqualPixelCounter(image, new Color(ScreenImage.TRANSPARENT_ALPHA_CHANNEL), 0);
         assertEquals(pixelCounterBefore, pixelCounterAfter);
         //image.save(System.getProperty("user.home") + "\\Desktop\\thumb.png");
