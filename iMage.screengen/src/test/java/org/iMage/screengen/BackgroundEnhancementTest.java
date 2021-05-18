@@ -33,9 +33,9 @@ public class BackgroundEnhancementTest {
                 this.getClass().getName(), ResourceLoader.FOREGROUND_IMAGE_FILE);
         assertNotNull(image);
         //image.save(System.getProperty("user.home") + "\\Desktop\\image.png");
-        chromaKeying.process(image);
+        ScreenImage processedImage = chromaKeying.process(image);
         //image.save(System.getProperty("user.home") + "\\Desktop\\processed.png");
-        ScreenImage enhancedImage = backgroundEnhancement.enhance(image);
+        ScreenImage enhancedImage = backgroundEnhancement.enhance(processedImage);
         ScreenImage combinedImage = ResourceLoader.loadImageResource(
                 this.getClass().getName(), ResourceLoader.COMBINED_IMAGE_FILE);
         assertNotNull(combinedImage);
