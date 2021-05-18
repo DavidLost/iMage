@@ -62,7 +62,7 @@ public class ChromaKeying implements Keying {
     for (int x = 0; x < image.getWidth(); x++) {
       for (int y = 0; y < image.getHeight(); y++) {
         if (colorDistance(new Color(image.getColor(x, y)), key) <= distance) {
-          image.setColor(Color.TRANSLUCENT, x, y);
+          image.setColor(x, y, Color.TRANSLUCENT);
         }
       }
     }

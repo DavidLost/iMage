@@ -3,6 +3,13 @@ package org.iMage.screengen;
 import org.iMage.screengen.base.Position;
 import org.iMage.screengen.base.ScreenImage;
 import org.iMage.screengen.base.ScreenImageEnhancement;
+import org.iMage.screengen.positions.CenterPosition;
+import org.iMage.screengen.positions.LowerCenterPosition;
+import org.iMage.screengen.positions.UpperLeftCornerPosition;
+import org.iMage.screengen.positions.UpperRightCornerPosition;
+
+import java.awt.*;
+import java.io.IOException;
 
 /**
  * The {@link BackgroundEnhancement} adds a background to the base image.
@@ -14,6 +21,9 @@ import org.iMage.screengen.base.ScreenImageEnhancement;
  */
 public class BackgroundEnhancement implements ScreenImageEnhancement {
 
+  private final ScreenImage background;
+  private final Position position;
+
   /**
    * Create a new background enhancement.
    *
@@ -21,7 +31,8 @@ public class BackgroundEnhancement implements ScreenImageEnhancement {
    * @param position   position of the base image on the background image
    */
   public BackgroundEnhancement(ScreenImage background, Position position) {
-    throw new RuntimeException("to be implemented");
+    this.background = background;
+    this.position = position;
   }
 
   /**
@@ -35,6 +46,25 @@ public class BackgroundEnhancement implements ScreenImageEnhancement {
    */
   @Override
   public ScreenImage enhance(ScreenImage baseImage) {
-    throw new RuntimeException("to be implemented");
+    if (baseImage.getWidth() > background.getWidth()) {
+      double scaleFactor = (double) background.getWidth() / baseImage.getWidth();
+      baseImage.scaleToWidth(background.getWidth());
+      baseImage.scaleToHeight((int) Math.round(baseImage.getHeight() * scaleFactor));
+    }
+    if (baseImage.getHeight() > background.getHeight()) {
+      double scaleFactor = (double) background.getHeight() / baseImage.getHeight();
+      baseImage.scaleToHeight(background.getHeight());
+      baseImage.scaleToWidth((int) Math.round(baseImage.getWidth() * scaleFactor));
+    }
+    Point startPos = position.calculateCorner(background, baseImage);
+    ScreenImage backgroundCopy = background.copy();
+    for (int x = 0; x < baseImage.getWidth(); x++) {
+      for (int y = 0; y < baseImage.getHeight(); y++) {
+        if (baseImage.getColor(x, y) != Color.TRANSLUCENT) {
+          backgroundCopy.setColor(startPos.x + x, startPos.y + y, baseImage.getColor(x, y));
+        }
+      }
+    }
+    return baseImage;
   }
 }

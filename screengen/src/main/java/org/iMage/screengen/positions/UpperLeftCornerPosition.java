@@ -27,6 +27,9 @@ public class UpperLeftCornerPosition extends Position {
 
   @Override
   public Point calculateCorner(ScreenImage background, ScreenImage foreground) {
-    throw new RuntimeException("to be implemented");
+    Point startPos = new Point();
+    startPos.x = 0;
+    startPos.y = 0;
+    return startPos;
   }
 }

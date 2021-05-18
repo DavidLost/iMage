@@ -27,6 +27,9 @@ public class CenterPosition extends Position {
 
   @Override
   public Point calculateCorner(ScreenImage background, ScreenImage foreground) {
-    throw new RuntimeException("to be implemented");
+    Point startPos = new Point();
+    startPos.x = (background.getWidth() - foreground.getWidth()) / 2;
+    startPos.y = (background.getHeight() - foreground.getHeight()) / 2;
+    return startPos;
   }
 }
