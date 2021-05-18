@@ -104,6 +104,11 @@ public class ChromaKeying implements Keying {
     return key;
   }
 
+  /**
+   * Get the distance that is used to determine the amount of deviation, for replacing pixels.
+   *
+   * @return distance
+   */
   public double getDistance() {
     return distance;
   }

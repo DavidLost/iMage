@@ -21,9 +21,12 @@ import java.util.Set;
 public class DefaultScreenGenerator implements ScreenGenerator {
 
   /**
-   *
+   * 24-Bit hexadecimal representation of the default green-value for the used greenscreen.
    */
   public static final String GREENSCREEN_COLOR_REPRESENTATION_KEY = "#43E23D";
+  /**
+   * Default value for the keying-distance used in the example-image.
+   */
   public static final double DEFAULT_KEYING_DISTANCE = 100;
 
   /**

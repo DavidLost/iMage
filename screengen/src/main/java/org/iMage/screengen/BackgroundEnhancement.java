@@ -41,6 +41,11 @@ public class BackgroundEnhancement implements ScreenImageEnhancement {
    */
   @Override
   public ScreenImage enhance(ScreenImage baseImage) {
+    /*
+     * If the foreground with is greater than the background width, the difference factor is calculated and the
+     * foreground image is scaled down to the background with and the height will also be scaled by the calculated
+     * factor to keep the image in ratio.
+     */
     if (baseImage.getWidth() > background.getWidth()) {
       double scaleFactor = (double) background.getWidth() / baseImage.getWidth();
       baseImage.scaleToWidth(background.getWidth());
@@ -53,6 +58,7 @@ public class BackgroundEnhancement implements ScreenImageEnhancement {
     }
     Point startPos = position.calculateCorner(background, baseImage);
     ScreenImage backgroundCopy = background.copy();
+    //Every pixel in the baseImage, which is not transparent, will overwrite the background.
     for (int x = 0; x < baseImage.getWidth(); x++) {
       for (int y = 0; y < baseImage.getHeight(); y++) {
         if (baseImage.getColor(x, y) != ScreenImage.TRANSPARENT_ALPHA_CHANNEL) {

@@ -1,7 +1,6 @@
 package org.iMage.screengen;
 
 import org.iMage.screengen.base.ScreenImage;
-import org.iMage.screengen.positions.CenterPosition;
 import org.iMage.screengen.positions.LowerCenterPosition;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,6 +20,13 @@ public class BackgroundEnhancementTest {
 
     public BackgroundEnhancementTest() throws ClassNotFoundException { }
 
+    /**
+     * This test takes the example-greenscreen-image, processes and enhanced with the example-background.
+     * Then it pixel-wise asserts the result is equal to the combined-example-image.
+     *
+     * @throws ClassNotFoundException if this class couldn't be found
+     * @throws IOException if there is a problem reading one of the image-resources
+     */
     @Test
     public void testEnhance() throws ClassNotFoundException, IOException {
         ScreenImage image = ResourceLoader.loadImageResource(

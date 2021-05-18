@@ -15,46 +15,50 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
 public class ChromaKeyingTest {
 
-
-
     private final Random random = new Random(ThreadLocalRandom.current().nextInt());
     private final ChromaKeying chromaKeying = new ChromaKeying(
             DefaultScreenGenerator.GREENSCREEN_COLOR_REPRESENTATION_KEY,random.nextDouble() * 255);
 
+    /**
+     * Test if the ChromaKeying-constructor actually throws the right exception, if an invalid color-code is passed.
+     */
     @Test
     public void testChromaKeyingConstructor() {
         assertThrows(IllegalArgumentException.class, () -> new ChromaKeying("#048CFG", 42));
     }
 
+    /**
+     * Test if the process-method sets the expected pixels transparent, by counting the pixel that should be made
+     * transparent and comparing the result to the actual transparent-set pixels.
+     */
     @Test
     public void testProcess() throws IOException, ClassNotFoundException {
         ScreenImage image = ResourceLoader.loadImageResource(
                 this.getClass().getName(), ResourceLoader.FOREGROUND_IMAGE_FILE);
         assertNotNull(image);
-        int pixelCounterBefore = getPixelCounter(image, true);
+        int pixelCounterBefore = getEqualPixelCounter(image, chromaKeying.getKey(), chromaKeying.getDistance());
         chromaKeying.process(image);
-        int pixelCounterAfter = getPixelCounter(image, false);
+        int pixelCounterAfter = getEqualPixelCounter(image, new Color(ScreenImage.TRANSPARENT_ALPHA_CHANNEL), 0);
         assertEquals(pixelCounterBefore, pixelCounterAfter);
-        image.save(System.getProperty("user.home") + "\\Desktop\\thumb.png");
+        //image.save(System.getProperty("user.home") + "\\Desktop\\thumb.png");
     }
 
-    public int getPixelCounter(ScreenImage image, boolean before) {
+    /**
+     *
+     * @param image is an image
+     * @param colorKey is the color that is searched for
+     * @param distance is the toleration-radius of the colorKey, for which pixels are counted
+     * @return the amount of pixels that are in the range of the colorKey
+     */
+    public int getEqualPixelCounter(ScreenImage image, Color colorKey, double distance) {
         int pixelCounter = 0;
         for (int x = 0; x < image.getWidth(); x++) {
             for (int y = 0; y < image.getHeight(); y++) {
-                if (before) {
-                    if (chromaKeying.colorDistance(new Color(image.getColor(x, y)), chromaKeying.getKey())
-                            <= chromaKeying.getDistance()) {
-                        pixelCounter++;
-                    }
-                } else {
-                    if (image.getColor(x, y) == ScreenImage.TRANSPARENT_ALPHA_CHANNEL) {
-                        pixelCounter++;
-                    }
+                if (chromaKeying.colorDistance(new Color(image.getColor(x, y)), colorKey) <= distance) {
+                    pixelCounter++;
                 }
             }
         }
         return pixelCounter;
     }
-
 }
