@@ -1,7 +1,6 @@
 package org.iMage.screengen;
 
 import org.iMage.screengen.base.BufferedScreenImage;
-import org.iMage.screengen.base.ScreenGenerator;
 import org.iMage.screengen.base.ScreenImage;
 
 import javax.imageio.ImageIO;

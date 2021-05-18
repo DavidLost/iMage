@@ -6,30 +6,30 @@ import org.iMage.screengen.base.ScreenImage;
 import java.awt.Point;
 
 /**
- * The upper left corner position of an image.
+ * The center position of an image.
  * <p>
  * Representation:<br>
- * [X] [ ] [ ]<br>
  * [ ] [ ] [ ]<br>
+ * [ ] [X] [ ]<br>
  * [ ] [ ] [ ]
  *
  * @author Paul Hoger
  * @version 1.0
  */
-public class UpperLeftCornerPosition extends Position {
+public class CenterPosition extends Position {
 
   /**
-   * Create a new upper left corner position.
+   * Create a new center position.
    */
-  public UpperLeftCornerPosition() {
-    super("to be implemented");
+  public CenterPosition() {
+    super("center");
   }
 
   @Override
   public Point calculateCorner(ScreenImage background, ScreenImage foreground) {
     Point startPos = new Point();
-    startPos.x = 0;
-    startPos.y = 0;
+    startPos.x = (background.getWidth() - foreground.getWidth()) / 2;
+    startPos.y = (background.getHeight() - foreground.getHeight()) / 2;
     return startPos;
   }
 }

@@ -46,23 +46,24 @@ public class BackgroundEnhancement implements ScreenImageEnhancement {
      * foreground image is scaled down to the background with and the height will also be scaled by the calculated
      * factor to keep the image in ratio.
      */
-    if (baseImage.getWidth() > background.getWidth()) {
-      double scaleFactor = (double) background.getWidth() / baseImage.getWidth();
-      baseImage.scaleToWidth(background.getWidth());
-      baseImage.scaleToHeight((int) Math.round(baseImage.getHeight() * scaleFactor));
+    ScreenImage resultImage = baseImage.copy();
+    if (resultImage.getWidth() > background.getWidth()) {
+      double scaleFactor = (double) background.getWidth() / resultImage.getWidth();
+      resultImage.scaleToWidth(background.getWidth());
+      resultImage.scaleToHeight((int) Math.round(resultImage.getHeight() * scaleFactor));
     }
-    if (baseImage.getHeight() > background.getHeight()) {
-      double scaleFactor = (double) background.getHeight() / baseImage.getHeight();
-      baseImage.scaleToHeight(background.getHeight());
-      baseImage.scaleToWidth((int) Math.round(baseImage.getWidth() * scaleFactor));
+    if (resultImage.getHeight() > background.getHeight()) {
+      double scaleFactor = (double) background.getHeight() / resultImage.getHeight();
+      resultImage.scaleToHeight(background.getHeight());
+      resultImage.scaleToWidth((int) Math.round(resultImage.getWidth() * scaleFactor));
     }
-    Point startPos = position.calculateCorner(background, baseImage);
+    Point startPos = position.calculateCorner(background, resultImage);
     ScreenImage backgroundCopy = background.copy();
-    //Every pixel in the baseImage, which is not transparent, will overwrite the background.
-    for (int x = 0; x < baseImage.getWidth(); x++) {
-      for (int y = 0; y < baseImage.getHeight(); y++) {
-        if (baseImage.getColor(x, y) != ScreenImage.TRANSPARENT_ALPHA_CHANNEL) {
-          backgroundCopy.setColor(startPos.x + x, startPos.y + y, baseImage.getColor(x, y));
+    //Every pixel in the resultImage, which is not transparent, will overwrite the background.
+    for (int x = 0; x < resultImage.getWidth(); x++) {
+      for (int y = 0; y < resultImage.getHeight(); y++) {
+        if (resultImage.getColor(x, y) != ScreenImage.TRANSPARENT_ALPHA_CHANNEL) {
+          backgroundCopy.setColor(startPos.x + x, startPos.y + y, resultImage.getColor(x, y));
         }
       }
     }

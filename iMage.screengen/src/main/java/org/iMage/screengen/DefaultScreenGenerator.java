@@ -41,7 +41,7 @@ public class DefaultScreenGenerator implements ScreenGenerator {
       ScreenImageEnhancement enhancement) {
       ScreenImage generatedImage = keying.process(greenscreenImage);
       if (enhancement != null) {
-        enhancement.enhance(generatedImage);
+          generatedImage = enhancement.enhance(generatedImage);
       }
       return generatedImage;
     }

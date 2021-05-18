@@ -67,14 +67,15 @@ public class ChromaKeying implements Keying {
    */
   @Override
   public ScreenImage process(ScreenImage image) {
-    for (int x = 0; x < image.getWidth(); x++) {
-      for (int y = 0; y < image.getHeight(); y++) {
-        if (colorDistance(new Color(image.getColor(x, y)), getKey()) <= distance) {
-          image.setColor(x, y, ScreenImage.TRANSPARENT_ALPHA_CHANNEL);
+    ScreenImage resultImage = image.copy();
+    for (int x = 0; x < resultImage.getWidth(); x++) {
+      for (int y = 0; y < resultImage.getHeight(); y++) {
+        if (colorDistance(new Color(resultImage.getColor(x, y)), getKey()) <= distance) {
+          resultImage.setColor(x, y, ScreenImage.TRANSPARENT_ALPHA_CHANNEL);
         }
       }
     }
-    return image;
+    return resultImage;
   }
 
   /**
