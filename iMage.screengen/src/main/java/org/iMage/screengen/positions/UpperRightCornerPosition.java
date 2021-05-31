@@ -28,7 +28,7 @@ public class UpperRightCornerPosition extends Position {
   @Override
   public Point calculateCorner(ScreenImage background, ScreenImage foreground) {
     Point startPos = new Point();
-    startPos.x = (background.getWidth() - foreground.getWidth()) / 2;
+    startPos.x = background.getWidth() - foreground.getWidth();
     startPos.y = 0;
     return startPos;
   }

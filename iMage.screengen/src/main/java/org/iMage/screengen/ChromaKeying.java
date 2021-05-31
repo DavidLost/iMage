@@ -89,6 +89,7 @@ public class ChromaKeying implements Keying {
     return Math.sqrt(nativeSquare(a.getRed() - b.getRed())
             + nativeSquare(a.getGreen() - b.getGreen())
             + nativeSquare(a.getBlue() - b.getBlue())
+            + nativeSquare(a.getAlpha() - b.getAlpha())
     );
   }
 

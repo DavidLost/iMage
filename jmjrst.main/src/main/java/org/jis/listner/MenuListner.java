@@ -15,6 +15,13 @@
  */
 package org.jis.listner;
 
+import org.jis.Main;
+import org.jis.options.Options;
+import org.jis.view.Menu;
+import org.jis.view.dialog.AboutBox;
+import org.jis.view.dialog.GallerieDialog;
+
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -22,15 +29,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
-
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-
-import org.jis.Main;
-import org.jis.options.Options;
-import org.jis.view.Menu;
-import org.jis.view.dialog.AboutBox;
-import org.jis.view.dialog.GallerieDialog;
 
 /**
  * @author <a href="http://www.jgeppert.com">Johannes Geppert</a>
@@ -160,5 +158,14 @@ public class MenuListner implements ActionListener {
         JOptionPane.showMessageDialog(m, tf, m.mes.getString("Menu.15"), JOptionPane.INFORMATION_MESSAGE);
       }
     }
+
+    for (int i = 0; i < menu.configure_plugins.size(); i++) {
+      if (menu.configure_plugins.get(i) == e.getSource()) {
+        String input = JOptionPane.showInputDialog(null, menu.jmjrstPlugins.get(i).getConfigurationDescription(),
+                menu.jmjrstPlugins.get(i).getName(), JOptionPane.QUESTION_MESSAGE);
+        menu.jmjrstPlugins.get(i).configure(input);
+      }
+    }
+
   }
 }

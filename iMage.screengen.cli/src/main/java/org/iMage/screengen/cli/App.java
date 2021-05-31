@@ -16,7 +16,6 @@ import org.iMage.screengen.positions.CenterPosition;
 
 import javax.imageio.ImageIO;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 /**
@@ -67,7 +66,7 @@ public final class App {
     String outputPath = cmd.getOptionValue("o");
     //distance argument
     double distance = 0;
-    if (cmd.getOptionValue("d") != null) {
+    if (cmd.hasOption("d")) {
       try {
         distance = Double.parseDouble(cmd.getOptionValue("d"));
       } catch (NumberFormatException nfe) {

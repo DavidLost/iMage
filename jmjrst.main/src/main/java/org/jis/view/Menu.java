@@ -15,16 +15,14 @@
  */
 package org.jis.view;
 
-import java.net.URL;
-
-import javax.swing.ImageIcon;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.UIManager;
-
+import org.iMage.plugins.JmjrstPlugin;
+import org.iMage.plugins.PluginLoader;
 import org.jis.Main;
 import org.jis.listner.MenuListner;
+
+import javax.swing.*;
+import java.net.URL;
+import java.util.ArrayList;
 
 /**
  * @author <a href="http://www.jgeppert.com">Johannes Geppert</a>
@@ -36,19 +34,23 @@ import org.jis.listner.MenuListner;
 public class Menu extends JMenuBar {
   private static final long serialVersionUID = 1232107393895691717L;
 
-  public JMenuItem          gener;
-  public JMenuItem          zippen;
-  public JMenuItem          gallerie;
-  public JMenuItem          exit;
-  public JMenuItem          set_quality;
-  public JMenuItem          info;
-  public JMenuItem          look_windows;
-  public JMenuItem          look_windows_classic;
-  public JMenuItem          look_nimbus;
-  public JMenuItem          look_metal;
-  public JMenuItem          look_motif;
-  public JMenuItem          look_gtk;
-  public JMenuItem          update_check;
+  public JMenuItem              gener;
+  public JMenuItem              zippen;
+  public JMenuItem              gallerie;
+  public JMenuItem              exit;
+  public JMenuItem              set_quality;
+  public JMenuItem              info;
+  public JMenuItem              look_windows;
+  public JMenuItem              look_windows_classic;
+  public JMenuItem              look_nimbus;
+  public JMenuItem              look_metal;
+  public JMenuItem              look_motif;
+  public JMenuItem              look_gtk;
+  public JMenuItem              update_check;
+  public ArrayList<JMenuItem>   configure_plugins;
+
+  public ArrayList<JmjrstPlugin> jmjrstPlugins;
+
 
   /**
    * @param m
@@ -56,9 +58,14 @@ public class Menu extends JMenuBar {
    */
   public Menu(Main m) {
     super();
+
+    jmjrstPlugins = new ArrayList<>();
+
     JMenu datei = new JMenu(m.mes.getString("Menu.0"));
     JMenu option = new JMenu(m.mes.getString("Menu.1"));
     JMenu optionen_look = new JMenu(m.mes.getString("Menu.2"));
+    JMenu plugins = new JMenu(m.mes.getString("Menu.17"));
+    ArrayList<JMenu> pluginNames = new ArrayList<>();
     JMenu about = new JMenu(m.mes.getString("Menu.3"));
 
     gener = new JMenuItem(m.mes.getString("Menu.4"));
@@ -98,6 +105,7 @@ public class Menu extends JMenuBar {
     look_metal = new JMenuItem(m.mes.getString("Menu.10"));
     look_motif = new JMenuItem(m.mes.getString("Menu.11"));
     look_gtk = new JMenuItem(m.mes.getString("Menu.12"));
+    configure_plugins = new ArrayList<>();
 
     gener.setEnabled(false);
     zippen.setEnabled(false);
@@ -112,12 +120,38 @@ public class Menu extends JMenuBar {
     option.add(set_quality);
     option.addSeparator();
     option.add(update_check);
+
+    MenuListner al = new MenuListner(m, this);
+
+    for (JmjrstPlugin jmjrstPlugin : PluginLoader.getPlugins()) {
+      jmjrstPlugins.add(jmjrstPlugin);
+      JMenu pluginName = new JMenu(jmjrstPlugin.getName());
+      pluginName.add(new JMenuItem(m.mes.getString("Menu.18")));
+      JMenuItem conf = new JMenuItem(m.mes.getString("Menu.19"));
+      configure_plugins.add(conf);
+      if (jmjrstPlugin.isConfigurable()) {
+        pluginName.add(conf);
+        conf.addActionListener(al);
+      }
+      pluginNames.add(pluginName);
+    }
+    for (int i = 0; i < pluginNames.size(); i++)  {
+      plugins.add(pluginNames.get(i));
+      if (i < pluginNames.size() - 1) {
+        plugins.addSeparator();
+      }
+    }
+    if (pluginNames.size() == 0) {
+      JMenuItem noPlugins = new JMenuItem("(No plugins available!)");
+      noPlugins.setEnabled(false);
+      plugins.add(noPlugins);
+    }
     about.add(info);
     this.add(datei);
     this.add(option);
+    this.add(plugins);
     this.add(about);
 
-    MenuListner al = new MenuListner(m, this);
     exit.addActionListener(al);
     gener.addActionListener(al);
     zippen.addActionListener(al);
@@ -133,8 +167,7 @@ public class Menu extends JMenuBar {
     update_check.addActionListener(al);
 
     UIManager.LookAndFeelInfo uii[] = UIManager.getInstalledLookAndFeels();
-    for (int i = 0; i < uii.length; i++)
-    {
+    for (int i = 0; i < uii.length; i++) {
       if (uii[i].toString().substring(uii[i].toString().lastIndexOf(" ") + 1, uii[i].toString().lastIndexOf("]")) //$NON-NLS-1$ //$NON-NLS-2$
       .equalsIgnoreCase("com.sun.java.swing.plaf.windows.WindowsLookAndFeel")) optionen_look.add(look_windows); //$NON-NLS-1$
       if (uii[i].toString().substring(uii[i].toString().lastIndexOf(" ") + 1, uii[i].toString().lastIndexOf("]")) //$NON-NLS-1$ //$NON-NLS-2$
@@ -149,5 +182,4 @@ public class Menu extends JMenuBar {
           .equalsIgnoreCase("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel")) optionen_look.add(look_nimbus); //$NON-NLS-1$
     }
   }
-
 }
