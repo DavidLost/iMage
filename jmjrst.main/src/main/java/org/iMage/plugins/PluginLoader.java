@@ -1,8 +1,11 @@
 package org.iMage.plugins;
 
+import org.jis.Main;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.List;
 import java.util.ServiceLoader;
 
 /**
@@ -36,13 +39,17 @@ public final class PluginLoader {
   public static Iterable<JmjrstPlugin> getPlugins() {
     if (plugins == null) {
       Iterator<JmjrstPlugin> pluginIterator = ServiceLoader.load(JmjrstPlugin.class).iterator();
-      ArrayList<JmjrstPlugin> pluginList = new ArrayList<>();
+      List<JmjrstPlugin> pluginList = new ArrayList<>();
       while (pluginIterator.hasNext()) {
         pluginList.add(pluginIterator.next());
       }
-      /*for (int i = 0; i < 8; i++) {
+      /*ServiceLoader<JmjrstPlugin> serviceLoader = ServiceLoader.load(JmjrstPlugin.class);
+      List<JmjrstPlugin> pluginList = new ArrayList<>();
+      serviceLoader.forEach(pluginList::add);*/
+      for (int i = 0; i < 5; i++) {
         int j = i;
         pluginList.add(new JmjrstPlugin() {
+          String config = super.getConfigurationDescription();
           @Override
           public String getName() {
             return "test-plugin-" + j;
@@ -56,13 +63,22 @@ public final class PluginLoader {
           }
           @Override
           public void run() {
+            System.out.println("running " + getName());
+          }
+          @Override
+          public void configure(String input) {
+            config = input;
           }
           @Override
           public boolean isConfigurable() {
             return j % 2 == 0;
           }
+          @Override
+          public String getConfigurationDescription() {
+            return config;
+          }
         });
-      }*/
+      }
       pluginList.sort(Comparator.comparing((JmjrstPlugin p) -> p).thenComparingInt(p -> p.getAuthors().size()));
       plugins = pluginList;
     }

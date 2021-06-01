@@ -47,6 +47,7 @@ public class Menu extends JMenuBar {
   public JMenuItem              look_motif;
   public JMenuItem              look_gtk;
   public JMenuItem              update_check;
+  public ArrayList<JMenuItem>   start_plugins;
   public ArrayList<JMenuItem>   configure_plugins;
 
   public ArrayList<JmjrstPlugin> jmjrstPlugins;
@@ -105,6 +106,7 @@ public class Menu extends JMenuBar {
     look_metal = new JMenuItem(m.mes.getString("Menu.10"));
     look_motif = new JMenuItem(m.mes.getString("Menu.11"));
     look_gtk = new JMenuItem(m.mes.getString("Menu.12"));
+    start_plugins = new ArrayList<>();
     configure_plugins = new ArrayList<>();
 
     gener.setEnabled(false);
@@ -126,7 +128,10 @@ public class Menu extends JMenuBar {
     for (JmjrstPlugin jmjrstPlugin : PluginLoader.getPlugins()) {
       jmjrstPlugins.add(jmjrstPlugin);
       JMenu pluginName = new JMenu(jmjrstPlugin.getName());
-      pluginName.add(new JMenuItem(m.mes.getString("Menu.18")));
+      JMenuItem start = new JMenuItem(m.mes.getString("Menu.18"));
+      start_plugins.add(start);
+      pluginName.add(start);
+      start.addActionListener(al);
       JMenuItem conf = new JMenuItem(m.mes.getString("Menu.19"));
       configure_plugins.add(conf);
       if (jmjrstPlugin.isConfigurable()) {

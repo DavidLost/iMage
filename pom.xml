@@ -20,6 +20,8 @@
         <module>jmjrst.main</module>
         <module>iMage.screengen</module>
         <module>iMage.screengen.cli</module>
+        <module>iMage.JavaCrashCourse-plugin</module>
+        <module>iMage.bundle</module>
     </modules>
 
     <parent>

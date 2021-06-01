@@ -160,12 +160,14 @@ public class MenuListner implements ActionListener {
     }
 
     for (int i = 0; i < menu.configure_plugins.size(); i++) {
-      if (menu.configure_plugins.get(i) == e.getSource()) {
-        String input = JOptionPane.showInputDialog(null, menu.jmjrstPlugins.get(i).getConfigurationDescription(),
+      if (menu.start_plugins.get(i) == e.getSource()) {
+        menu.jmjrstPlugins.get(i).run();
+      } else if (menu.configure_plugins.get(i) == e.getSource()) {
+        String input = JOptionPane.showInputDialog(null,
+                menu.jmjrstPlugins.get(i).getConfigurationDescription(),
                 menu.jmjrstPlugins.get(i).getName(), JOptionPane.QUESTION_MESSAGE);
         menu.jmjrstPlugins.get(i).configure(input);
       }
     }
-
   }
 }
