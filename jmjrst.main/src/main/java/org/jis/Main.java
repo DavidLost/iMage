@@ -15,42 +15,22 @@
  */
 package org.jis;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GraphicsConfiguration;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
-import java.awt.Rectangle;
-import java.io.File;
-import java.net.URL;
-import java.util.Locale;
-
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
-import javax.swing.JTextPane;
-import javax.swing.ProgressMonitor;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-import javax.swing.text.SimpleAttributeSet;
-import javax.swing.text.StyleConstants;
-import javax.swing.text.StyledDocument;
-
 import org.jis.generator.Generator;
 import org.jis.listner.ExitListner;
 import org.jis.options.Options;
-import org.jis.view.FileTree;
 import org.jis.view.List;
 import org.jis.view.Menu;
-import org.jis.view.Preview;
-import org.jis.view.Status;
-import org.jis.view.Toolbar;
+import org.jis.view.*;
 import org.jis.view.dialog.OptionsEdit;
+
+import javax.swing.*;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
+import java.awt.*;
+import java.io.File;
+import java.net.URL;
+import java.util.Locale;
 
 /**
  * @author <a href="http://www.jgeppert.com">Johannes Geppert</a>

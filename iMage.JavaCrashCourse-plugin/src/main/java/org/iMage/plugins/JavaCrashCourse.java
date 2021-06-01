@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
-@MetaInfServices
+@MetaInfServices()
 public class JavaCrashCourse extends JmjrstPlugin {
 
     private JavaVersion currentVersion = JavaVersion.JAVA_16;
