@@ -23,7 +23,7 @@ public class JavaCrashCourse extends JmjrstPlugin {
      */
     @Override
     public String getName() {
-        return "JavaCrashCourse";
+        return "JavaCrashCourse-plugin";
     }
 
     /**
