@@ -15,23 +15,14 @@
  */
 package org.jis.generator;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Vector;
-
-import javax.swing.JOptionPane;
-import javax.swing.ProgressMonitor;
-
 import org.jis.Main;
 import org.jis.options.Options;
 import org.jis.view.dialog.Layout;
+
+import javax.swing.*;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Vector;
 
 /**
  * @author <a href="http://www.jgeppert.com">Johannes Geppert</a>

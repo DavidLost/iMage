@@ -15,12 +15,12 @@
  */
 package org.jis.generator;
 
+import org.jis.Main;
+import org.jis.options.Options;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Vector;
-
-import org.jis.Main;
-import org.jis.options.Options;
 
 /**
  * @author <a href="http://www.jgeppert.com">Johannes Geppert</a>

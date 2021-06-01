@@ -187,8 +187,8 @@ if (samurai instanceof Warrior warrior) {
     @Override
     public void run() {
         rnd.ints(0, FEATURES_PER_VERSION).distinct().limit((FEATURES_PER_VERSION + 1) / 2)
-                .mapToObj(i -> features.stream().filter(f -> f.version().equals(currentVersion)).toList()
-                .get(i)).sorted(Comparator.comparing(Feature::name)).forEach(Feature::print);
+                .mapToObj(i -> features.stream().filter(f -> f.version().equals(currentVersion)).toList().get(i))
+                .sorted(Comparator.comparing(Feature::name)).forEach(Feature::print);
     }
 
     @Override

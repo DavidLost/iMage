@@ -15,14 +15,11 @@
  */
 package org.jis.view;
 
-import java.net.URL;
-
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JToolBar;
-
 import org.jis.Main;
 import org.jis.listner.MenuListner;
+
+import javax.swing.*;
+import java.net.URL;
 
 /**
  * @author <a href="http://www.jgeppert.com">Johannes Geppert</a>

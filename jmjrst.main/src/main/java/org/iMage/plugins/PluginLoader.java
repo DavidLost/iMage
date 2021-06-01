@@ -37,17 +37,24 @@ public final class PluginLoader {
       while (pluginIterator.hasNext()) {
         pluginList.add(pluginIterator.next());
       }
-      /*for (int i = 0; i < 5; i++) {
+      /*int pluginAmount = 6;
+      for (int i = 0; i < pluginAmount; i++) {
         int j = i;
         pluginList.add(new JmjrstPlugin() {
           String config = super.getConfigurationDescription();
           @Override
           public String getName() {
-            return "test-plugin-" + j;
+            return switch (j) {
+              case 0 -> "A-first";
+              case 1 -> "{-last";
+              case 2 -> "@-very-first";
+              default -> "test-plugin-" + (pluginAmount - j);
+            };
           }
           @Override
           public List<String> getAuthors() {
-            return null;
+            return Arrays.stream(new String[] {"David", "Herr Lolz", "Simon", "Peter", "Es", "Mr. Robot"})
+                    .limit(pluginAmount - j).toList();
           }
           @Override
           public void init(Main main) {
