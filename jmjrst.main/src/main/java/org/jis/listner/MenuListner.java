@@ -161,6 +161,7 @@ public class MenuListner implements ActionListener {
 
     for (int i = 0; i < menu.configure_plugins.size(); i++) {
       if (menu.start_plugins.get(i) == e.getSource()) {
+        menu.jmjrstPlugins.get(i).init(m);
         menu.jmjrstPlugins.get(i).run();
       } else if (menu.configure_plugins.get(i) == e.getSource()) {
         String input = JOptionPane.showInputDialog(null,
