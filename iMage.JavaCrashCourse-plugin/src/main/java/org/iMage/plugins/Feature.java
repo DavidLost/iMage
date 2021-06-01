@@ -5,7 +5,6 @@ package org.iMage.plugins;
  *
  * @author David Rösler (KIT)
  * @version 1.0
- *
  * @param name is the name of the code-example.
  * @param version is the java-version in which the example is written.
  * @param example contains a code-example in the specified version and is stored as String.

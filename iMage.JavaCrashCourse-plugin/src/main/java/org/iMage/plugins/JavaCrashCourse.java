@@ -10,15 +10,19 @@ import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
+ * JavaCrashCourse is a JmjrstPlugin, providing code-examples.
+ * @see #getConfigurationDescription()
  *
+ * @author David Rösler (KIT)
+ * @version 1.0
  */
 @MetaInfServices()
 public class JavaCrashCourse extends JmjrstPlugin {
 
     private boolean initialized = false;
     private JavaVersion currentVersion = JavaVersion.JAVA_16;
-    private static final int FEATURES_PER_VERSION = 3;
     private final List<Feature> features = new ArrayList<>();
+    private static final int FEATURES_PER_VERSION = 3;
     private final Random rnd = new Random(ThreadLocalRandom.current().nextInt());
 
     /**
@@ -40,7 +44,7 @@ public class JavaCrashCourse extends JmjrstPlugin {
     @Override
     public List<String> getAuthors() {
         List<String> authors = new ArrayList<>();
-        authors.add("David Rösler");
+        authors.add("David Rösler (KIT)");
         return authors;
     }
 
@@ -51,6 +55,7 @@ public class JavaCrashCourse extends JmjrstPlugin {
      *
      * @param main JMJRST main application
      */
+    @SuppressWarnings("checkstyle:LocalFinalVariableName")
     @Override
     public void init(Main main) {
 
@@ -176,6 +181,8 @@ if (samurai instanceof Warrior warrior) {
 
     /**
      * Run the plugin.
+     * This plugin will print out (atm. always 2, but in general the rounded up half amount of features available)
+     * features of the currently selected java-version.
      */
     @Override
     public void run() {
@@ -187,7 +194,7 @@ if (samurai instanceof Warrior warrior) {
     @Override
     public String getConfigurationDescription() {
         return "JavaCrashCourse is a test-plugin, showing you code-examples for new features in various java-versions."
-                + "Valid java-versions to configure are: 8, 11 and 16.";
+                + System.lineSeparator() + "Valid java-versions to configure are: 8, 11 and 16.";
     }
 
     @Override

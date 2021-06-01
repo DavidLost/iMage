@@ -1,12 +1,6 @@
 package org.iMage.plugins;
 
-import org.jis.Main;
-
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ServiceLoader;
+import java.util.*;
 
 /**
  * The plugin loader loads all available plugins using the {@link ServiceLoader}.
@@ -43,10 +37,7 @@ public final class PluginLoader {
       while (pluginIterator.hasNext()) {
         pluginList.add(pluginIterator.next());
       }
-      /*ServiceLoader<JmjrstPlugin> serviceLoader = ServiceLoader.load(JmjrstPlugin.class);
-      List<JmjrstPlugin> pluginList = new ArrayList<>();
-      serviceLoader.forEach(pluginList::add);*/
-      for (int i = 0; i < 5; i++) {
+      /*for (int i = 0; i < 5; i++) {
         int j = i;
         pluginList.add(new JmjrstPlugin() {
           String config = super.getConfigurationDescription();
@@ -78,7 +69,7 @@ public final class PluginLoader {
             return config;
           }
         });
-      }
+      }*/
       pluginList.sort(Comparator.comparing((JmjrstPlugin p) -> p).thenComparingInt(p -> p.getAuthors().size()));
       plugins = pluginList;
     }
