@@ -13,7 +13,7 @@ import java.awt.Color;
  * @author Paul Hoger
  * @version 1.0
  */
-public class ChromaKeying implements Keying {
+public class ChromaKeying_old implements Keying {
 
   private final Color key;
   private final double distance;
@@ -28,23 +28,18 @@ public class ChromaKeying implements Keying {
    *                                  or cannot be parsed to a color
    * @throws IllegalArgumentException if the distance is negative
    */
-  public ChromaKeying(String keyRepresentation, double distance) {
+  public ChromaKeying_old(String keyRepresentation, double distance) {
     if (!keyRepresentation.startsWith("#")) {
-      throw new IllegalArgumentException("Key representation has to start with '#'");
-    }
-    if (keyRepresentation.length() > 7) {
-      throw new IllegalArgumentException("Key representation doesn't represent 24 bits");
+      throw new IllegalArgumentException("color key representation has to start with: #");
     }
     if (distance < 0) {
-      throw new IllegalArgumentException("Distance has to be non-negative");
+      throw new IllegalArgumentException("distance can't be negative!");
     }
-
     try {
       this.key = Color.decode(keyRepresentation);
-    } catch (NumberFormatException e) {
-      throw new IllegalArgumentException("Key representation is not a valid hexadecimal number");
+    } catch (NumberFormatException nfe) {
+      throw new IllegalArgumentException("invalid color key representation!");
     }
-
     this.distance = distance;
   }
 
@@ -55,11 +50,10 @@ public class ChromaKeying implements Keying {
    * @param distance maximal distance to the key color
    * @throws IllegalArgumentException if the distance is negative
    */
-  public ChromaKeying(Color key, double distance) {
+  public ChromaKeying_old(Color key, double distance) {
     if (distance < 0) {
-      throw new IllegalArgumentException("Distance has to be non-negative");
+      throw new IllegalArgumentException("distance can't be negative!");
     }
-
     this.key = key;
     this.distance = distance;
   }
@@ -73,20 +67,15 @@ public class ChromaKeying implements Keying {
    */
   @Override
   public ScreenImage process(ScreenImage image) {
-    ScreenImage result = image.copy();
-
-    for (int x = 0; x < image.getWidth(); x++) {
-      for (int y = 0; y < image.getHeight(); y++) {
-        Color color = new Color(image.getColor(x, y), true);
-
-        if (colorDistance(color, key) <= distance) {
-          result.setColor(x, y, new Color(color.getRed(), color.getGreen(), color.getBlue(),
-              ScreenImage.TRANSPARENT_ALPHA_CHANNEL).getRGB());
+    ScreenImage resultImage = image.copy();
+    for (int x = 0; x < resultImage.getWidth(); x++) {
+      for (int y = 0; y < resultImage.getHeight(); y++) {
+        if (colorDistance(new Color(resultImage.getColor(x, y)), getKey()) <= distance) {
+          resultImage.setColor(x, y, ScreenImage.TRANSPARENT_ALPHA_CHANNEL);
         }
       }
     }
-
-    return result;
+    return resultImage;
   }
 
   /**
@@ -97,9 +86,15 @@ public class ChromaKeying implements Keying {
    * @return euclidean distance between two colors in the RGBA color space
    */
   protected double colorDistance(Color a, Color b) {
-    return Math.sqrt(
-        Math.pow(a.getRed() - b.getRed(), 2) + Math.pow(a.getGreen() - b.getGreen(), 2) + Math
-            .pow(a.getBlue() - b.getBlue(), 2) + Math.pow(a.getAlpha() - b.getAlpha(), 2));
+    return Math.sqrt(nativeSquare(a.getRed() - b.getRed())
+            + nativeSquare(a.getGreen() - b.getGreen())
+            + nativeSquare(a.getBlue() - b.getBlue())
+            + nativeSquare(a.getAlpha() - b.getAlpha())
+    );
+  }
+
+  private int nativeSquare(int a) {
+    return a * a;
   }
 
   /**
@@ -109,5 +104,14 @@ public class ChromaKeying implements Keying {
    */
   public Color getKey() {
     return key;
+  }
+
+  /**
+   * Get the distance that is used to determine the amount of deviation, for replacing pixels.
+   *
+   * @return distance
+   */
+  public double getDistance() {
+    return distance;
   }
 }

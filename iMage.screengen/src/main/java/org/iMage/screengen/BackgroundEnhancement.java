@@ -4,6 +4,7 @@ import org.iMage.screengen.base.Position;
 import org.iMage.screengen.base.ScreenImage;
 import org.iMage.screengen.base.ScreenImageEnhancement;
 
+import java.awt.Color;
 import java.awt.Point;
 
 /**
@@ -41,32 +42,33 @@ public class BackgroundEnhancement implements ScreenImageEnhancement {
    */
   @Override
   public ScreenImage enhance(ScreenImage baseImage) {
-    /*
-     * If the foreground with is greater than the background width, the difference factor is calculated and the
-     * foreground image is scaled down to the background with and the height will also be scaled by the calculated
-     * factor to keep the image in ratio.
-     */
-    ScreenImage resultImage = baseImage.copy();
-    if (resultImage.getWidth() > background.getWidth()) {
-      double scaleFactor = (double) background.getWidth() / resultImage.getWidth();
-      resultImage.scaleToWidth(background.getWidth());
-      resultImage.scaleToHeight((int) Math.round(resultImage.getHeight() * scaleFactor));
+    ScreenImage result = background.copy();
+
+    ScreenImage scaledForeground = baseImage.copy();
+
+    // Scale foreground image iff needed
+    if (scaledForeground.getWidth() > background.getWidth()) {
+      scaledForeground.scaleToWidth(background.getWidth());
     }
-    if (resultImage.getHeight() > background.getHeight()) {
-      double scaleFactor = (double) background.getHeight() / resultImage.getHeight();
-      resultImage.scaleToHeight(background.getHeight());
-      resultImage.scaleToWidth((int) Math.round(resultImage.getWidth() * scaleFactor));
+    if (scaledForeground.getHeight() > background.getHeight()) {
+      scaledForeground.scaleToHeight(background.getHeight());
     }
-    Point startPos = position.calculateCorner(background, resultImage);
-    ScreenImage backgroundCopy = background.copy();
-    //Every pixel in the resultImage, which is not transparent, will overwrite the background.
-    for (int x = 0; x < resultImage.getWidth(); x++) {
-      for (int y = 0; y < resultImage.getHeight(); y++) {
-        if (resultImage.getColor(x, y) != ScreenImage.TRANSPARENT_ALPHA_CHANNEL) {
-          backgroundCopy.setColor(startPos.x + x, startPos.y + y, resultImage.getColor(x, y));
+
+    // Draw foreground onto background
+    Point start = position.calculateCorner(background, scaledForeground);
+
+    for (int x = 0; x < scaledForeground.getWidth(); x++) {
+      for (int y = 0; y < scaledForeground.getHeight(); y++) {
+        Color color = new Color(scaledForeground.getColor(x, y), true);
+        if (color.getAlpha() == ScreenImage.TRANSPARENT_ALPHA_CHANNEL) {
+          continue;
         }
+
+        result.setColor((int) start.getX() + x, (int) start.getY() + y,
+            scaledForeground.getColor(x, y));
       }
     }
-    return backgroundCopy;
+
+    return result;
   }
 }

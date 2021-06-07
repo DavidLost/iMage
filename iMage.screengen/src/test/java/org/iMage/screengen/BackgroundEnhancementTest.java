@@ -15,7 +15,7 @@ public class BackgroundEnhancementTest {
 
     BackgroundEnhancement backgroundEnhancement = new BackgroundEnhancement(ResourceLoader.loadImageResource(
             this.getClass().getName(), ResourceLoader.BACKGROUND_IMAGE_FILE), new LowerCenterPosition());
-    ChromaKeying chromaKeying = new ChromaKeying(DefaultScreenGenerator.GREENSCREEN_COLOR_REPRESENTATION_KEY,
+    ChromaKeying_old chromaKeying = new ChromaKeying_old(DefaultScreenGenerator.GREENSCREEN_COLOR_REPRESENTATION_KEY,
             DefaultScreenGenerator.DEFAULT_KEYING_DISTANCE);
 
     public BackgroundEnhancementTest() throws ClassNotFoundException { }

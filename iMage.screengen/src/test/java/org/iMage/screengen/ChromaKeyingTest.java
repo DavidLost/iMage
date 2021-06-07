@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ChromaKeyingTest {
 
     private final Random random = new Random(ThreadLocalRandom.current().nextInt());
-    private final ChromaKeying chromaKeying = new ChromaKeying(
+    private final ChromaKeying_old chromaKeying = new ChromaKeying_old(
             DefaultScreenGenerator.GREENSCREEN_COLOR_REPRESENTATION_KEY,random.nextDouble() * 255);
 
     /**
@@ -23,7 +23,7 @@ public class ChromaKeyingTest {
      */
     @Test
     public void testChromaKeyingConstructor() {
-        assertThrows(IllegalArgumentException.class, () -> new ChromaKeying("#048CFG", 42));
+        assertThrows(IllegalArgumentException.class, () -> new ChromaKeying_old("#048CFG", 42));
     }
 
     /**

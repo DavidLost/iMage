@@ -7,7 +7,7 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.iMage.screengen.BackgroundEnhancement;
-import org.iMage.screengen.ChromaKeying;
+import org.iMage.screengen.ChromaKeying_old;
 import org.iMage.screengen.DefaultScreenGenerator;
 import org.iMage.screengen.base.BufferedScreenImage;
 import org.iMage.screengen.base.Position;
@@ -86,7 +86,7 @@ public final class App {
     } catch (NullPointerException npe) {
       exit("the input file doesn't exist!", npe);
     }
-    ChromaKeying chromaKeying = new ChromaKeying(colorString, distance);
+    ChromaKeying_old chromaKeying = new ChromaKeying_old(colorString, distance);
 
     ScreenImage background = null;
     try {
