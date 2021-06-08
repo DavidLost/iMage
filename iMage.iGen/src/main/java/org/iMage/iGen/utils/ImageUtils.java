@@ -1,12 +1,16 @@
-package org.iMage.iGen;
+package org.iMage.iGen.utils;
 
 import org.iMage.screengen.base.ScreenImage;
 
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 
-public class GraphicUtils {
+public class ImageUtils {
 
     public static BufferedImage resize(BufferedImage image, int width, int height) {
         checkWidthAndHeightNotZero(width, height);
@@ -93,6 +97,49 @@ public class GraphicUtils {
             }
         }
         return image;
+    }
+
+    public static BufferedImage getImageViaFileChooser() {
+        JFileChooser fc = new JFileChooser();
+        fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        fc.addChoosableFileFilter(new FileNameExtensionFilter("Images, only png, jpg or jpeg", "png", "jpg", "jpeg"));
+        fc.setAcceptAllFileFilterUsed(false);
+        int result = fc.showOpenDialog(null);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File selected = fc.getSelectedFile();
+            BufferedImage image = null;
+            try {
+                image = ImageIO.read(selected);
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Something went wrong loading the file!",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+            }
+            return image;
+        }
+        return null;
+    }
+
+    public static void saveImageAsPngViaFileChooser(BufferedImage image) {
+        JFileChooser fc = new JFileChooser();
+        int result = fc.showSaveDialog(null);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File file = fc.getSelectedFile();
+            if (!file.getName().endsWith(".png")) {
+                file = new File(file.getAbsolutePath() + ".png");
+            }
+            if (file.exists()) {
+                int overwrite = JOptionPane.showConfirmDialog(null, "This file already exists! Do you want to overwrite it?");
+                if (overwrite != JOptionPane.OK_OPTION) return;
+            }
+            try {
+                ImageIO.write(image, "png", file);
+            } catch (IOException e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Something went wrong saving the image!",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }
 
     private static void checkWidthAndHeightNotZero(int width, int height) {
