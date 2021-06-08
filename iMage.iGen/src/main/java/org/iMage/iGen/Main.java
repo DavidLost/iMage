@@ -1,6 +1,7 @@
 package org.iMage.iGen;
 
 import org.iMage.screengen.DefaultScreenGenerator;
+import org.iMage.screengen.base.Position;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -16,21 +17,25 @@ public class Main extends JFrame {
 
     public static int IMAGE_MAX_WIDTH = 560;
     public static int IMAGE_MAX_HEIGHT = 380;
+    public static double INVALID_KEYING_DISTANCE = -1;
 
     BufferedImage inputImage = null;
     BufferedImage outputImage = null;
+    BufferedImage backgroundImage = null;
     Color keyingColor = Color.decode("#43E23D");
+    double keyingDistance = 100;
 
     JLabel inputImageLabel = new JLabel();
     JLabel outputImageLabel = new JLabel();
     JButton keyingLoadInputButton = new JButton("Load Input");
     JButton keyingApplyButton = new JButton("Apply");
     JButton keyingColorSelectButton = new JButton("Select color chooser");
-    JTextField keyingDistanceField = new JTextField("100.0");
+    JTextField keyingDistanceField = new JTextField(Double.toString(keyingDistance));
     JButton enhanceRevertButton = new JButton("Revert");
     JButton enhanceApplyButton = new JButton("Apply");
     JButton enhanceSaveButton = new JButton("Save");
     JButton enhanceSelectImageButton = new JButton("Select Image");
+    JComboBox<Position> enhancePositionBox = new JComboBox<>(DefaultScreenGenerator.POSITIONS.toArray(new Position[0]));
 
     public static void main(String[] args) {
 
@@ -52,15 +57,14 @@ public class Main extends JFrame {
 
         JPanel panel = new JPanel();
 
-        BufferedImage inputImage = null;
         try {
-            inputImage = ImageIO.read(new File("C:\\Users\\David\\Desktop\\karlsruhe.jpg"));
+            inputImage = ImageIO.read(new File("C:\\Users\\David\\Desktop\\thumb.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        inputImageLabel.setIcon(new ImageIcon(GraphicUtils.resizeKeepRelation(inputImage, IMAGE_MAX_WIDTH, IMAGE_MAX_HEIGHT)));
-        outputImageLabel.setIcon(new ImageIcon(GraphicUtils.resizeKeepRelation(inputImage, IMAGE_MAX_WIDTH, IMAGE_MAX_HEIGHT)));
+        outputImage = GraphicUtils.getBlankImage(IMAGE_MAX_WIDTH, IMAGE_MAX_HEIGHT);
+        updateInputImageLabel();
+        updateOutputImageLabel();
         keyingColorSelectButton.setBackground(keyingColor);
 
         panel.add(new JLabel("Input" + " ".repeat(188) + "Output" + " ".repeat(164)));
@@ -89,7 +93,7 @@ public class Main extends JFrame {
         enhanceConfigPanel.add(new JLabel("Background Image"));
         enhanceConfigPanel.add(enhanceSelectImageButton);
         enhanceConfigPanel.add(new JLabel("Position"));
-        enhanceConfigPanel.add(new JComboBox<>());
+        enhanceConfigPanel.add(enhancePositionBox);
         enhanceConfigPanel.setBorder(new TitledBorder("Configuration"));
 
         JPanel enhanceButtonsPanel = new JPanel(new GridLayout());
@@ -124,9 +128,16 @@ public class Main extends JFrame {
                 float f;
                 try {
                     f = Float.parseFloat(keyingDistanceField.getText());
-                    if (f < 0) keyingDistanceField.setBackground(Color.RED);
-                    else keyingDistanceField.setBackground(Color.WHITE);
+                    if (f < 0) {
+                        keyingDistance = INVALID_KEYING_DISTANCE;
+                        keyingDistanceField.setBackground(Color.RED);
+                    }
+                    else {
+                        keyingDistance = f;
+                        keyingDistanceField.setBackground(Color.WHITE);
+                    }
                 } catch (NumberFormatException nfe) {
+                    keyingDistance = INVALID_KEYING_DISTANCE;
                     keyingDistanceField.setBackground(Color.RED);
                 }
             }
@@ -137,6 +148,16 @@ public class Main extends JFrame {
         enhanceSelectImageButton.addActionListener(listener);
 
         setVisible(true);
+    }
+
+    protected void updateInputImageLabel() {
+        inputImageLabel.setIcon(new ImageIcon(GraphicUtils.resizeKeepRelationAndFill(
+                inputImage, IMAGE_MAX_WIDTH, IMAGE_MAX_HEIGHT, Color.WHITE)));
+    }
+
+    protected void updateOutputImageLabel() {
+        outputImageLabel.setIcon(new ImageIcon(GraphicUtils.resizeKeepRelationAndFill(
+                outputImage, IMAGE_MAX_WIDTH, IMAGE_MAX_HEIGHT, Color.WHITE)));
     }
 
 }
