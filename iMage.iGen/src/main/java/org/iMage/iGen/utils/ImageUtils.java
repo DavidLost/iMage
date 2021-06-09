@@ -89,11 +89,11 @@ public class ImageUtils {
         return bufferedImage;
     }
 
-    public static BufferedImage getBlankImage(int width, int height) {
+    public static BufferedImage getBlankImage(int width, int height, Color fillColor) {
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_3BYTE_BGR);
         for (int i = 0; i < image.getWidth(); i++) {
             for (int j = 0; j < image.getHeight(); j++) {
-                image.setRGB(i, j, Color.WHITE.getRGB());
+                image.setRGB(i, j, fillColor.getRGB());
             }
         }
         return image;
@@ -105,40 +105,37 @@ public class ImageUtils {
         fc.addChoosableFileFilter(new FileNameExtensionFilter("Images, only png, jpg or jpeg", "png", "jpg", "jpeg"));
         fc.setAcceptAllFileFilterUsed(false);
         int result = fc.showOpenDialog(null);
-        if (result == JFileChooser.APPROVE_OPTION) {
-            File selected = fc.getSelectedFile();
-            BufferedImage image = null;
-            try {
-                image = ImageIO.read(selected);
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
-                JOptionPane.showMessageDialog(null, "Something went wrong loading the file!",
-                        "Error", JOptionPane.ERROR_MESSAGE);
-            }
-            return image;
+        if (result != JFileChooser.APPROVE_OPTION) return null;
+        File selected = fc.getSelectedFile();
+        BufferedImage image = null;
+        try {
+            image = ImageIO.read(selected);
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Something went wrong loading the file!",
+                    "Error", JOptionPane.ERROR_MESSAGE);
         }
-        return null;
+        return image;
     }
 
     public static void saveImageAsPngViaFileChooser(BufferedImage image) {
         JFileChooser fc = new JFileChooser();
         int result = fc.showSaveDialog(null);
-        if (result == JFileChooser.APPROVE_OPTION) {
-            File file = fc.getSelectedFile();
-            if (!file.getName().endsWith(".png")) {
-                file = new File(file.getAbsolutePath() + ".png");
-            }
-            if (file.exists()) {
-                int overwrite = JOptionPane.showConfirmDialog(null, "This file already exists! Do you want to overwrite it?");
-                if (overwrite != JOptionPane.OK_OPTION) return;
-            }
-            try {
-                ImageIO.write(image, "png", file);
-            } catch (IOException e) {
-                e.printStackTrace();
-                JOptionPane.showMessageDialog(null, "Something went wrong saving the image!",
-                        "Error", JOptionPane.ERROR_MESSAGE);
-            }
+        if (result != JFileChooser.APPROVE_OPTION) return;
+        File file = fc.getSelectedFile();
+        if (!file.getName().endsWith(".png")) {
+            file = new File(file.getAbsolutePath() + ".png");
+        }
+        if (file.exists()) {
+            int overwrite = JOptionPane.showConfirmDialog(null, "This file already exists! Do you want to overwrite it?");
+            if (overwrite != JOptionPane.OK_OPTION) return;
+        }
+        try {
+            ImageIO.write(image, "png", file);
+        } catch (IOException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Something went wrong saving the image!",
+                    "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 

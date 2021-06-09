@@ -15,6 +15,7 @@ import java.awt.image.BufferedImage;
 
 public class FrameActionListener implements ActionListener {
 
+    public static final int MAGIC_CONSTANT = 420;
     private final IGenGUI gui;
 
     public FrameActionListener(IGenGUI gui) {
@@ -30,7 +31,7 @@ public class FrameActionListener implements ActionListener {
         } else if (e.getSource().equals(gui.keyingColorSelectButton)) {
             onGetNewKeyingColor();
         } else if (e.getSource().equals(gui.enhanceRevertButton)) {
-            //TODO
+            onRevertLastStep();
         } else if (e.getSource().equals(gui.enhanceApplyButton)) {
             onApplyEnhancement();
         } else if (e.getSource().equals(gui.enhanceSaveButton)) {
@@ -56,9 +57,13 @@ public class FrameActionListener implements ActionListener {
             return;
         }
         ChromaKeying keying = new ChromaKeying(gui.keyingColor, gui.keyingDistance);
+        if (gui.outputImageState != IGenGUI.OUTPUTIMAGE_STATE_KEYED) {
+            gui.lastOutputImage = gui.outputImage;
+        }
         gui.outputImage = ImageUtils.screenImageToBufferedImage(
                 keying.process(new BufferedScreenImage(gui.inputImage)));
         gui.updateOutputImageLabel();
+        gui.outputImageState = IGenGUI.OUTPUTIMAGE_STATE_KEYED;
     }
 
     private void onGetNewKeyingColor() {
@@ -67,23 +72,39 @@ public class FrameActionListener implements ActionListener {
         if (color == null) return;
         gui.keyingColor = color;
         gui.keyingColorSelectButton.setBackground(color);
-        if (color.getRed() + color.getGreen() + color.getBlue() > 420) {
+        if (color.getRed() + color.getGreen() + color.getBlue() > MAGIC_CONSTANT) {
             gui.keyingColorSelectButton.setForeground(Color.BLACK);
         }
         else gui.keyingColorSelectButton.setForeground(Color.WHITE);
     }
 
+    private void onRevertLastStep() {
+        if (gui.outputImageState == IGenGUI.OUTPUTIMAGE_STATE_DEFAULT) return;
+        gui.outputImage = gui.lastOutputImage;
+        gui.updateOutputImageLabel();
+        if (gui.outputImageState == IGenGUI.OUTPUTIMAGE_STATE_KEYED) {
+            gui.outputImageState = IGenGUI.OUTPUTIMAGE_STATE_DEFAULT;
+        } else if (gui.outputImageState == IGenGUI.OUTPUTIMAGE_STATE_ENHANCED) {
+            gui.lastOutputImage = ImageUtils.getBlankImage(IGenGUI.IMAGE_MAX_WIDTH, IGenGUI.IMAGE_MAX_HEIGHT, Color.WHITE);
+            gui.outputImageState = IGenGUI.OUTPUTIMAGE_STATE_KEYED;
+        }
+    }
+
     private void onApplyEnhancement() {
         if (gui.backgroundImage == null) {
-            JOptionPane.showMessageDialog(gui, "You probably first want to select a background-image :)",
+            JOptionPane.showMessageDialog(gui, "You probably want to select a background-image first :)",
                     "Warning", JOptionPane.WARNING_MESSAGE);
             return;
         }
         Position pos = (Position) gui.enhancePositionComboBox.getSelectedItem();
         BackgroundEnhancement bge = new BackgroundEnhancement(new BufferedScreenImage(gui.backgroundImage), pos);
+        if (gui.outputImageState != IGenGUI.OUTPUTIMAGE_STATE_ENHANCED) {
+            gui.lastOutputImage = gui.outputImage;
+        }
         gui.outputImage = ImageUtils.screenImageToBufferedImage(
                 bge.enhance(new BufferedScreenImage(gui.outputImage)));
         gui.updateOutputImageLabel();
+        gui.outputImageState = IGenGUI.OUTPUTIMAGE_STATE_ENHANCED;
     }
 
     private void onLoadBackgroundImage() {
