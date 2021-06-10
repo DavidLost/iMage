@@ -4,7 +4,9 @@ import org.iMage.iGen.gui.IGenGUI;
 import org.iMage.iGen.utils.ImageUtils;
 import org.iMage.screengen.BackgroundEnhancement;
 import org.iMage.screengen.ChromaKeying;
+import org.iMage.screengen.LumaKeying;
 import org.iMage.screengen.base.BufferedScreenImage;
+import org.iMage.screengen.base.Keying;
 import org.iMage.screengen.base.Position;
 
 import javax.swing.*;
@@ -12,6 +14,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.util.Objects;
 
 public class FrameActionListener implements ActionListener {
 
@@ -50,16 +53,30 @@ public class FrameActionListener implements ActionListener {
     }
 
     private void onApplyKeying() {
-        if (gui.keyingDistance == IGenGUI.INVALID_KEYING_DISTANCE) {
-            JOptionPane.showMessageDialog(gui,
-                    "Your keying distance has to be a valid non-negative double value!",
-                    "Error", JOptionPane.ERROR_MESSAGE);
-            return;
+        Keying keying = null;
+        if (Objects.equals(gui.keyingModeComboBox.getSelectedItem(), gui.KEYING_MODE_CHROMA)) {
+            if (gui.keyingDistance == IGenGUI.INVALID_KEYING_DISTANCE) {
+                JOptionPane.showMessageDialog(gui,
+                        "Your keying distance has to be a valid non-negative double value!",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            keying = new ChromaKeying(gui.keyingColor, gui.keyingDistance);
+        } else if (Objects.equals(gui.keyingModeComboBox.getSelectedItem(), gui.KEYING_MODE_LUMA)) {
+            float min = gui.keyingBrightnessMinSlider.getValue() / 100f;
+            float max = gui.keyingBrightnessMaxSlider.getValue() / 100f;
+            if (min > max) {
+                JOptionPane.showMessageDialog(gui,
+                        "Your min. brightness should not be greater thant you max. brightness!",
+                        "Warning", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            keying = new LumaKeying(min, max);
         }
-        ChromaKeying keying = new ChromaKeying(gui.keyingColor, gui.keyingDistance);
         if (gui.outputImageState != IGenGUI.OUTPUTIMAGE_STATE_KEYED) {
             gui.lastOutputImage = gui.outputImage;
         }
+        assert keying != null;
         gui.outputImage = ImageUtils.screenImageToBufferedImage(
                 keying.process(new BufferedScreenImage(gui.inputImage)));
         gui.updateOutputImageLabel();
