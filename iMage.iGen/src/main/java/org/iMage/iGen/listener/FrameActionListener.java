@@ -5,9 +5,11 @@ import org.iMage.iGen.utils.ImageUtils;
 import org.iMage.screengen.BackgroundEnhancement;
 import org.iMage.screengen.ChromaKeying;
 import org.iMage.screengen.LumaKeying;
+import org.iMage.screengen.TextEnhancement;
 import org.iMage.screengen.base.BufferedScreenImage;
 import org.iMage.screengen.base.Keying;
 import org.iMage.screengen.base.Position;
+import org.iMage.screengen.base.ScreenImageEnhancement;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,7 +20,7 @@ import java.util.Objects;
 
 public class FrameActionListener implements ActionListener {
 
-    public static final int MAGIC_CONSTANT = 420;
+    public static final int MAGIC_NUMBER = 420;
     private final IGenGUI gui;
 
     public FrameActionListener(IGenGUI gui) {
@@ -89,7 +91,7 @@ public class FrameActionListener implements ActionListener {
         if (color == null) return;
         gui.keyingColor = color;
         gui.keyingColorSelectButton.setBackground(color);
-        if (color.getRed() + color.getGreen() + color.getBlue() > MAGIC_CONSTANT) {
+        if (color.getRed() + color.getGreen() + color.getBlue() > MAGIC_NUMBER) {
             gui.keyingColorSelectButton.setForeground(Color.BLACK);
         }
         else gui.keyingColorSelectButton.setForeground(Color.WHITE);
@@ -108,18 +110,27 @@ public class FrameActionListener implements ActionListener {
     }
 
     private void onApplyEnhancement() {
-        if (gui.backgroundImage == null) {
-            JOptionPane.showMessageDialog(gui, "You probably want to select a background-image first :)",
-                    "Warning", JOptionPane.WARNING_MESSAGE);
-            return;
+        ScreenImageEnhancement enhancement = null;
+        if (Objects.equals(gui.enhanceModeComboBox.getSelectedItem(), gui.ENHANCE_MODE_BACKGROUND)) {
+            if (gui.backgroundImage == null) {
+                JOptionPane.showMessageDialog(gui, "You probably want to select a background-image first :)",
+                        "Warning", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            Position pos = (Position) gui.enhancePositionComboBox1.getSelectedItem();
+            enhancement = new BackgroundEnhancement(new BufferedScreenImage(gui.backgroundImage), pos);
+        } else if (Objects.equals(gui.enhanceModeComboBox.getSelectedItem(), gui.ENHANCE_MODE_TEXT)) {
+            Font font = new Font((String) gui.enhanceFontComboBox.getSelectedItem(),
+                    Font.PLAIN, (int) gui.enhanceSizeSpinner.getValue());
+            Position pos = (Position) gui.enhancePositionComboBox2.getSelectedItem();
+            enhancement = new TextEnhancement(gui.enhanceTextField.getText(), font, pos);
         }
-        Position pos = (Position) gui.enhancePositionComboBox.getSelectedItem();
-        BackgroundEnhancement bge = new BackgroundEnhancement(new BufferedScreenImage(gui.backgroundImage), pos);
         if (gui.outputImageState != IGenGUI.OUTPUTIMAGE_STATE_ENHANCED) {
             gui.lastOutputImage = gui.outputImage;
         }
+        assert enhancement != null;
         gui.outputImage = ImageUtils.screenImageToBufferedImage(
-                bge.enhance(new BufferedScreenImage(gui.outputImage)));
+                enhancement.enhance(new BufferedScreenImage(gui.outputImage)));
         gui.updateOutputImageLabel();
         gui.outputImageState = IGenGUI.OUTPUTIMAGE_STATE_ENHANCED;
     }

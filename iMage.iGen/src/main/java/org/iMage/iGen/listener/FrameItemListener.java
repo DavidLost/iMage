@@ -16,7 +16,12 @@ public class FrameItemListener implements ItemListener {
 
     @Override
     public void itemStateChanged(ItemEvent e) {
-        CardLayout layout = (CardLayout) gui.keyingConfigPanel.getLayout();
-        layout.show(gui.keyingConfigPanel, (String) e.getItem());
+        if (e.getSource() == gui.keyingModeComboBox) {
+            CardLayout layout = (CardLayout) gui.keyingConfigPanel.getLayout();
+            layout.show(gui.keyingConfigPanel, (String) e.getItem());
+        } else if (e.getSource() == gui.enhanceModeComboBox) {
+            CardLayout layout = (CardLayout) gui.enhanceConfigPanel.getLayout();
+            layout.show(gui.enhanceConfigPanel, (String) e.getItem());
+        }
     }
 }

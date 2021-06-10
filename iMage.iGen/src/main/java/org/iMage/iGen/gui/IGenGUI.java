@@ -36,8 +36,6 @@ public class IGenGUI extends JFrame {
     public Color keyingColor = Color.decode("#43E23D");
     public double keyingDistance = 100;
 
-
-
     private final JLabel inputImageLabel = new JLabel();
     private final JLabel outputImageLabel = new JLabel();
     public final JButton keyingLoadInputButton = new JButton("Load Input");
@@ -52,8 +50,15 @@ public class IGenGUI extends JFrame {
     public final JButton enhanceRevertButton = new JButton("Revert");
     public final JButton enhanceApplyButton = new JButton("Apply");
     public final JButton enhanceSaveButton = new JButton("Save");
+    public final JPanel enhanceConfigPanel = new JPanel(new CardLayout());
     public final JButton enhanceSelectImageButton = new JButton("Select Image...");
-    public final JComboBox<Position> enhancePositionComboBox = new JComboBox<>(
+    public final JComboBox<Position> enhancePositionComboBox1 = new JComboBox<>(
+            DefaultScreenGenerator.POSITIONS.toArray(new Position[0]));
+    public final JTextField enhanceTextField = new JTextField("Hello World");
+    public final JComboBox<String> enhanceFontComboBox = new JComboBox<>(
+            GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames());
+    public final JSpinner enhanceSizeSpinner = new JSpinner();
+    public final JComboBox<Position> enhancePositionComboBox2 = new JComboBox<>(
             DefaultScreenGenerator.POSITIONS.toArray(new Position[0]));
 
     public IGenGUI() {
@@ -64,32 +69,27 @@ public class IGenGUI extends JFrame {
     private void init() {
 
         setTitle("iGen");
-        setSize(1240, 640);
+        setSize(1240, 630);
         setLocationRelativeTo(null);
         setResizable(false);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        //URL imageUrl = getClass().getResource("/thumb.png");
-        /*try {
-            inputImage = ImageIO.read(new File("C:\\Users\\David\\Desktop\\thumb.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
         inputImage = ImageUtils.getBlankImage(IMAGE_MAX_WIDTH, IMAGE_MAX_HEIGHT, keyingColor);
         outputImage = ImageUtils.getBlankImage(IMAGE_MAX_WIDTH, IMAGE_MAX_HEIGHT, Color.WHITE);
         updateInputImageLabel();
         updateOutputImageLabel();
         keyingColorSelectButton.setBackground(keyingColor);
+        enhanceSizeSpinner.setValue(16);
 
         Insets defaultPadding = new Insets(10, HORIZONTAL_PADDING, 10, HORIZONTAL_PADDING);
         Insets sliderLabelPadding = new Insets(0, 6, 0, 6);
-        Insets sliderPadding = new Insets(0, HORIZONTAL_PADDING, 0, HORIZONTAL_PADDING);
+        Insets sliderPadding = new Insets(1, HORIZONTAL_PADDING, 1, HORIZONTAL_PADDING);
 
         JOptionsPanel keyingConfigColorPanel = new JOptionsPanel(defaultPadding);
         keyingConfigColorPanel.addAll(new JLabel("Color"), keyingColorSelectButton);
 
         JOptionsPanel keyingConfigDistancePanel = new JOptionsPanel(defaultPadding);
-        keyingConfigDistancePanel.addAll(new JLabel("Distance"), new JLabel(" ".repeat(92)), keyingDistanceField);
+        keyingConfigDistancePanel.addAll(new JLabel("Distance" + " ".repeat(93)), keyingDistanceField);
 
         JOptionsPanel keyingChromaConfigPanel = new JOptionsPanel(BoxLayout.Y_AXIS);
         keyingChromaConfigPanel.addAll(keyingConfigColorPanel, keyingConfigDistancePanel);
@@ -123,24 +123,42 @@ public class IGenGUI extends JFrame {
 
         JTitledPanel keyingPanel = new JTitledPanel("Keying", BoxLayout.Y_AXIS,
                 keyingButtonsPanel, new JTitledPanel("Configuration", keyingConfigPanel));
-        keyingPanel.setPreferredSize(new Dimension(IMAGE_MAX_WIDTH, 185));
+        keyingPanel.setPreferredSize(new Dimension(IMAGE_MAX_WIDTH, 190));
 
         enhanceSelectImageButton.setPreferredSize(new Dimension(146, 30));
         JOptionsPanel enhanceConfigImagePanel = new JOptionsPanel(defaultPadding);
         enhanceConfigImagePanel.addAll(new JLabel("Background Image"), enhanceSelectImageButton);
 
-        JOptionsPanel enhanceConfigPosPanel = new JOptionsPanel(defaultPadding);
-        enhanceConfigPosPanel.addAll(new JLabel("Position"), new JLabel(" ".repeat(85)), enhancePositionComboBox);
+        JOptionsPanel enhanceConfigPosPanel1 = new JOptionsPanel(defaultPadding);
+        enhanceConfigPosPanel1.addAll(new JLabel("Position" + " ".repeat(92)), enhancePositionComboBox1);
 
-        JOptionsPanel enhanceConfigPanel = new JOptionsPanel(BoxLayout.Y_AXIS);
-        enhanceConfigPanel.addAll(enhanceConfigImagePanel, enhanceConfigPosPanel);
+        JOptionsPanel enhanceBackgroundConfigPanel = new JOptionsPanel(BoxLayout.Y_AXIS);
+        enhanceBackgroundConfigPanel.addAll(enhanceConfigImagePanel, enhanceConfigPosPanel1);
+
+        JOptionsPanel enhanceConfigTextPanel = new JOptionsPanel(sliderPadding);
+        enhanceConfigTextPanel.addAll(new JLabel("Text" + " ".repeat(90)), enhanceTextField);
+
+        JOptionsPanel enhanceConfigFontPanel = new JOptionsPanel(sliderPadding);
+        enhanceConfigFontPanel.addAll(new JLabel("Font" + " ".repeat(90)), enhanceFontComboBox);
+
+        JOptionsPanel enhanceConfigSizePanel = new JOptionsPanel(sliderPadding);
+        enhanceConfigSizePanel.addAll(new JLabel("Size" + " ".repeat(41)), enhanceSizeSpinner);
+
+        JOptionsPanel enhanceConfigPosPanel2 = new JOptionsPanel(sliderPadding);
+        enhanceConfigPosPanel2.addAll(new JLabel("Position" + " ".repeat(66)), enhancePositionComboBox2);
+
+        JOptionsPanel enhanceTextConfigPanel = new JOptionsPanel(BoxLayout.Y_AXIS);
+        enhanceTextConfigPanel.addAll(enhanceConfigTextPanel, enhanceConfigFontPanel, enhanceConfigSizePanel, enhanceConfigPosPanel2);
+
+        enhanceConfigPanel.add(enhanceBackgroundConfigPanel, ENHANCE_MODE_BACKGROUND);
+        enhanceConfigPanel.add(enhanceTextConfigPanel, ENHANCE_MODE_TEXT);
 
         JOptionsPanel enhanceButtonsPanel = new JOptionsPanel(defaultPadding);
         enhanceButtonsPanel.addAll(enhanceModeComboBox, enhanceRevertButton, enhanceApplyButton, enhanceSaveButton);
 
         JTitledPanel enhancePanel = new JTitledPanel("Enhancement", BoxLayout.Y_AXIS,
                 enhanceButtonsPanel, new JTitledPanel("Configuration", enhanceConfigPanel));
-        enhancePanel.setPreferredSize(new Dimension(IMAGE_MAX_WIDTH, 185));
+        enhancePanel.setPreferredSize(new Dimension(IMAGE_MAX_WIDTH, 190));
 
         JOptionsPanel total = new JOptionsPanel(BoxLayout.Y_AXIS);
         JPanel l = new JPanel();
@@ -166,10 +184,16 @@ public class IGenGUI extends JFrame {
         keyingApplyButton.addActionListener(al);
         keyingColorSelectButton.addActionListener(al);
         keyingDistanceField.addKeyListener(kl);
+        enhanceModeComboBox.addItemListener(il);
         enhanceRevertButton.addActionListener(al);
         enhanceApplyButton.addActionListener(al);
         enhanceSaveButton.addActionListener(al);
         enhanceSelectImageButton.addActionListener(al);
+        enhanceSizeSpinner.addChangeListener(e -> {
+            if ((int) enhanceSizeSpinner.getValue() <= 0) {
+                enhanceSizeSpinner.setValue(1);
+            }
+        });
 
         setVisible(true);
     }
