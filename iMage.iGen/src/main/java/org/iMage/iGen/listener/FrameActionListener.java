@@ -18,15 +18,28 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.util.Objects;
 
+/**
+ * Listener implementation of the IGenGUI, which contains most logic what happens when buttons are clicked.
+ *
+ * @author David Rösler (KIT)
+ * @version 1.0
+ */
 public class FrameActionListener implements ActionListener {
 
     public static final int MAGIC_NUMBER = 420;
     private final IGenGUI gui;
 
+    /**
+     * @param gui is the instance of the IGenGUI-class.
+     */
     public FrameActionListener(IGenGUI gui) {
         this.gui = gui;
     }
 
+    /**
+     * Determine what's the source the ActionEvent comes from.
+     * @param e is the ActionEvent.
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource().equals(gui.keyingLoadInputButton)) {
@@ -46,6 +59,10 @@ public class FrameActionListener implements ActionListener {
         }
     }
 
+    /**
+     * When the loadInputImage-button is clicked, a Filechooser will ask you to select a image.
+     * If a valid image was selected, the inputImage is updated and displayed.
+     */
     private void onLoadInputImage() {
         BufferedImage image = ImageUtils.getImageViaFileChooser();
         if (image != null) {
@@ -54,6 +71,11 @@ public class FrameActionListener implements ActionListener {
         }
     }
 
+    /**
+     * When the applyKeying-button is clicked, it is determined which keying-mode is active.
+     * Then all keying parameters are beeing approved and finally the keying will be applied and the outputImage
+     * will be updated.
+     */
     private void onApplyKeying() {
         Keying keying = null;
         if (Objects.equals(gui.keyingModeComboBox.getSelectedItem(), gui.KEYING_MODE_CHROMA)) {
@@ -75,16 +97,15 @@ public class FrameActionListener implements ActionListener {
             }
             keying = new LumaKeying(min, max);
         }
-        if (gui.outputImageState != IGenGUI.OUTPUTIMAGE_STATE_KEYED) {
-            gui.lastOutputImage = gui.outputImage;
-        }
         assert keying != null;
-        gui.outputImage = ImageUtils.screenImageToBufferedImage(
-                keying.process(new BufferedScreenImage(gui.inputImage)));
-        gui.updateOutputImageLabel();
-        gui.outputImageState = IGenGUI.OUTPUTIMAGE_STATE_KEYED;
+        updateOutputImage(ImageUtils.screenImageToBufferedImage(
+                keying.process(new BufferedScreenImage(gui.inputImage))));
     }
 
+    /**
+     * When the loadInputImage-button is clicked, a filechooser will ask you to select a image.
+     * If a valid image was selected, the inputImage is updated and displayed.
+     */
     private void onGetNewKeyingColor() {
         Color color = JColorChooser.showDialog(gui,
                 "Colorchooser", gui.keyingColorSelectButton.getBackground());
@@ -93,22 +114,24 @@ public class FrameActionListener implements ActionListener {
         gui.keyingColorSelectButton.setBackground(color);
         if (color.getRed() + color.getGreen() + color.getBlue() > MAGIC_NUMBER) {
             gui.keyingColorSelectButton.setForeground(Color.BLACK);
-        }
-        else gui.keyingColorSelectButton.setForeground(Color.WHITE);
+        } else gui.keyingColorSelectButton.setForeground(Color.WHITE);
     }
 
+    /**
+     * When the revert-button is clicked, the last keying respectively enhancement will be undone.
+     * If there exists no previous action, nothing will happen.
+     */
     private void onRevertLastStep() {
-        if (gui.outputImageState == IGenGUI.OUTPUTIMAGE_STATE_DEFAULT) return;
-        gui.outputImage = gui.lastOutputImage;
+        if (gui.outputImageHistory.size() == 0) return;
+        gui.outputImage = gui.outputImageHistory.get(gui.outputImageHistory.size() - 1);
+        gui.outputImageHistory.remove(gui.outputImageHistory.size() - 1);
         gui.updateOutputImageLabel();
-        if (gui.outputImageState == IGenGUI.OUTPUTIMAGE_STATE_KEYED) {
-            gui.outputImageState = IGenGUI.OUTPUTIMAGE_STATE_DEFAULT;
-        } else if (gui.outputImageState == IGenGUI.OUTPUTIMAGE_STATE_ENHANCED) {
-            gui.lastOutputImage = ImageUtils.getBlankImage(IGenGUI.IMAGE_MAX_WIDTH, IGenGUI.IMAGE_MAX_HEIGHT, Color.WHITE);
-            gui.outputImageState = IGenGUI.OUTPUTIMAGE_STATE_KEYED;
-        }
     }
 
+    /**
+     * When the applyEnhancement-button is clicked, it is determined which enhancement-mode is active.
+     * After checking the parameters the respective enhancement is applied and the outputImage is updated.
+     */
     private void onApplyEnhancement() {
         ScreenImageEnhancement enhancement = null;
         if (Objects.equals(gui.enhanceModeComboBox.getSelectedItem(), gui.ENHANCE_MODE_BACKGROUND)) {
@@ -125,16 +148,15 @@ public class FrameActionListener implements ActionListener {
             Position pos = (Position) gui.enhancePositionComboBox2.getSelectedItem();
             enhancement = new TextEnhancement(gui.enhanceTextField.getText(), font, pos);
         }
-        if (gui.outputImageState != IGenGUI.OUTPUTIMAGE_STATE_ENHANCED) {
-            gui.lastOutputImage = gui.outputImage;
-        }
         assert enhancement != null;
-        gui.outputImage = ImageUtils.screenImageToBufferedImage(
-                enhancement.enhance(new BufferedScreenImage(gui.outputImage)));
-        gui.updateOutputImageLabel();
-        gui.outputImageState = IGenGUI.OUTPUTIMAGE_STATE_ENHANCED;
+        updateOutputImage(ImageUtils.screenImageToBufferedImage(
+                enhancement.enhance(new BufferedScreenImage(gui.outputImage))));
     }
 
+    /**
+     * As soon as the loadBackgroundImage-button is pressed, a filechooser asks for a image.
+     * If a valid image is selected, it will be set as background-image.
+     */
     private void onLoadBackgroundImage() {
         BufferedImage image = ImageUtils.getImageViaFileChooser();
         if (image != null) {
@@ -142,8 +164,23 @@ public class FrameActionListener implements ActionListener {
         }
     }
 
+    /**
+     * This method is triggerd by the saveImage-button and opens a file-save dialog, which will save the image.
+     */
     private void onSaveImage() {
         ImageUtils.saveImageAsPngViaFileChooser(gui.outputImage);
+    }
+
+    /**
+     * If the outputImage is about to be updated, first the old outputImage is added to the history.
+     * Then the actual update happens.
+     * @param newImage is the new outputImage. If it is null, no update will happen.
+     */
+    public void updateOutputImage(BufferedImage newImage) {
+        if (newImage == null) return;
+        gui.outputImageHistory.add(gui.outputImage);
+        gui.outputImage = newImage;
+        gui.updateOutputImageLabel();
     }
 
 }
