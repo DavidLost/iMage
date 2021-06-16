@@ -1,6 +1,7 @@
 package org.iMage.iGen.gui.components;
 
-import javax.swing.*;
+import javax.swing.BoxLayout;
+import javax.swing.JComponent;
 import javax.swing.border.TitledBorder;
 
 /**

@@ -2,7 +2,7 @@ package org.iMage.iGen.listener;
 
 import org.iMage.iGen.gui.IGenGUI;
 
-import java.awt.*;
+import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 

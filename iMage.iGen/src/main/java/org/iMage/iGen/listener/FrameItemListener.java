@@ -2,7 +2,7 @@ package org.iMage.iGen.listener;
 
 import org.iMage.iGen.gui.IGenGUI;
 
-import java.awt.*;
+import java.awt.CardLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 

@@ -11,8 +11,10 @@ import org.iMage.screengen.base.Keying;
 import org.iMage.screengen.base.Position;
 import org.iMage.screengen.base.ScreenImageEnhancement;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JColorChooser;
+import javax.swing.JOptionPane;
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;

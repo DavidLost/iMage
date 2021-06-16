@@ -1,8 +1,10 @@
 package org.iMage.iGen.gui.components;
 
-import javax.swing.*;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JComponent;
 import javax.swing.border.EmptyBorder;
-import java.awt.*;
+import java.awt.Insets;
 
 /**
  * Concrete Implementation of a JCustomPanel, which uses the BoxLayout.
