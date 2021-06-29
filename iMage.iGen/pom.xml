@@ -9,8 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>swt1.ub4.a4</groupId>
-    <artifactId>2375486</artifactId>
+    <artifactId>iMage.iGen</artifactId>
 
     <properties>
         <maven.compiler.source>16</maven.compiler.source>
