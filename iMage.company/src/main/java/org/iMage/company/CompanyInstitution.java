@@ -31,7 +31,7 @@ public abstract class CompanyInstitution implements CompanyComponent {
     @Override
     public void work() {
         for (CompanyComponent child : children) {
-            System.out.println(getName() + " is calling to work: " + child.getName());
+            System.out.println("work-distribution:  " + getName() + " -> " + child.getName());
             child.work();
         }
     }

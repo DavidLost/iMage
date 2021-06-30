@@ -5,6 +5,11 @@ import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import com.opencsv.exceptions.CsvException;
+import org.iMage.company.CompanyComponent;
+import org.iMage.company.Department;
+import org.iMage.company.Employee;
+import org.iMage.company.PearCorpCompany;
+import org.iMage.company.Team;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -46,6 +51,36 @@ public class CompanyCSVReader {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public PearCorpCompany createCompositionTree(List<String[]> data) {
+        PearCorpCompany pearCorp = new PearCorpCompany("PearCorp");
+        for (String[] entry : data) {
+            Department department = null;
+            for (CompanyComponent d : pearCorp.getChildren()) {
+                if (d.getName().equals(entry[2])) {
+                    department = (Department) d;
+                    break;
+                }
+            }
+            if (department == null) {
+                department = new Department(entry[2]);
+                pearCorp.add(department);
+            }
+            Team team = null;
+            for (CompanyComponent t : department.getChildren()) {
+                if (t.getName().equals(entry[1])) {
+                    team = (Team) t;
+                    break;
+                }
+            }
+            if (team == null) {
+                team = new Team(entry[1]);
+                department.add(team);
+            }
+            team.add(new Employee(entry[0]));
+        }
+        return pearCorp;
     }
 
     public List<String[]> getDataWithKeys() {

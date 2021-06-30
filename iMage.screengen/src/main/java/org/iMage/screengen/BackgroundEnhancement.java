@@ -15,20 +15,16 @@ import java.awt.Point;
  * @version 1.0
  * @see Position
  */
-public class BackgroundEnhancement implements ScreenImageEnhancement {
-
-  private final ScreenImage background;
-  private final Position position;
+public class BackgroundEnhancement extends EnhancmentBase implements ScreenImageEnhancement {
 
   /**
-   * Create a new background enhancement.
+   * Create a new background image.
    *
    * @param background new background image
    * @param position   position of the base image on the background image
    */
   public BackgroundEnhancement(ScreenImage background, Position position) {
-    this.background = background;
-    this.position = position;
+    super(background, position);
   }
 
   /**
