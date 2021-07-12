@@ -19,17 +19,14 @@ import java.awt.Point;
 public class UpperLeftCornerPosition extends Position {
 
   /**
-   * Create a new upper left corner position.
+   * Create a new position with description "upper left corner".
    */
   public UpperLeftCornerPosition() {
-    super("upper_left");
+    super("upper left corner");
   }
 
   @Override
   public Point calculateCorner(ScreenImage background, ScreenImage foreground) {
-    Point startPos = new Point();
-    startPos.x = 0;
-    startPos.y = 0;
-    return startPos;
+    return new Point(0, 0);
   }
 }

@@ -19,17 +19,16 @@ import java.awt.Point;
 public class LowerCenterPosition extends Position {
 
   /**
-   * Create a new lower center position.
+   * Create a new position with description "lower center".
    */
   public LowerCenterPosition() {
-    super("lower_center");
+    super("lower center");
   }
 
   @Override
   public Point calculateCorner(ScreenImage background, ScreenImage foreground) {
-    Point startPos = new Point();
-    startPos.x = (background.getWidth() - foreground.getWidth()) / 2;
-    startPos.y = background.getHeight() - foreground.getHeight();
-    return startPos;
+    int x = (int) ((background.getWidth() - foreground.getWidth()) / 2.0);
+    int y = background.getHeight() - foreground.getHeight();
+    return new Point(x, y);
   }
 }

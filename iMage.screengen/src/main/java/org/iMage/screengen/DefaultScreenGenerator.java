@@ -21,15 +21,6 @@ import java.util.Set;
 public class DefaultScreenGenerator implements ScreenGenerator {
 
   /**
-   * 24-Bit hexadecimal representation of the default green-value for the used greenscreen.
-   */
-  public static final String GREENSCREEN_COLOR_REPRESENTATION_KEY = "#43E23D";
-  /**
-   * Default value for the keying-distance used in the example-image.
-   */
-  public static final double DEFAULT_KEYING_DISTANCE = 100;
-
-  /**
    * Set of all possible positions.
    */
   public static final Set<Position> POSITIONS = Set
@@ -39,10 +30,12 @@ public class DefaultScreenGenerator implements ScreenGenerator {
   @Override
   public ScreenImage generate(ScreenImage greenscreenImage, Keying keying,
       ScreenImageEnhancement enhancement) {
-      ScreenImage generatedImage = keying.process(greenscreenImage);
-      if (enhancement != null) {
-          generatedImage = enhancement.enhance(generatedImage);
-      }
-      return generatedImage;
+    ScreenImage result = keying.process(greenscreenImage);
+
+    if (enhancement != null) {
+      result = enhancement.enhance(result);
     }
+
+    return result;
+  }
 }

@@ -24,6 +24,7 @@
         <module>iMage.bundle</module>
         <module>iMage.iGen</module>
         <module>iMage.company</module>
+        <module>iMage.screengen.parallel</module>
     </modules>
 
     <parent>

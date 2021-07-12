@@ -19,7 +19,7 @@ import java.awt.Point;
 public class CenterPosition extends Position {
 
   /**
-   * Create a new center position.
+   * Create a new position with description "center".
    */
   public CenterPosition() {
     super("center");
@@ -27,9 +27,9 @@ public class CenterPosition extends Position {
 
   @Override
   public Point calculateCorner(ScreenImage background, ScreenImage foreground) {
-    Point startPos = new Point();
-    startPos.x = (background.getWidth() - foreground.getWidth()) / 2;
-    startPos.y = (background.getHeight() - foreground.getHeight()) / 2;
-    return startPos;
+    int x = (int) ((background.getWidth() - foreground.getWidth()) / 2.0);
+    int y = (int) ((background.getHeight() - foreground.getHeight()) / 2.0);
+
+    return new Point(x, y);
   }
 }

@@ -9,8 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>swt1.ub5.a4</groupId>
-    <artifactId>2375486</artifactId>
+    <artifactId>iMage.screengen.parallel</artifactId>
 
     <properties>
         <maven.compiler.source>16</maven.compiler.source>
@@ -19,19 +18,14 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.opencsv</groupId>
-            <artifactId>opencsv</artifactId>
+            <groupId>swt1</groupId>
+            <artifactId>iMage.screengen</artifactId>
+            <version>0.0.4-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <version>5.7.1</version>
-            <scope>compile</scope>
+            <groupId>swt1</groupId>
+            <artifactId>iMage.iGen</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
 
