@@ -25,6 +25,7 @@
         <module>iMage.iGen</module>
         <module>iMage.company</module>
         <module>iMage.screengen.parallel</module>
+        <module>iMage.screengen.benchmark</module>
     </modules>
 
     <parent>

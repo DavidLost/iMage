@@ -1,13 +1,9 @@
 package org.iMage.screengen.parallel;
 
-import org.iMage.iGen.utils.ImageUtils;
 import org.iMage.screengen.ChromaKeying;
-import org.iMage.screengen.base.BufferedScreenImage;
 import org.iMage.screengen.base.Keying;
 import org.iMage.screengen.base.ScreenImage;
 
-import java.awt.Color;
-import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 public class ParallelChromaKeying extends ParallelProcessing implements Keying {

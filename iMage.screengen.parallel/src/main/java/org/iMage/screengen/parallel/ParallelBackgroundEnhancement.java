@@ -6,11 +6,8 @@ import org.iMage.screengen.BackgroundEnhancement;
 import org.iMage.screengen.base.BufferedScreenImage;
 import org.iMage.screengen.base.ScreenImage;
 import org.iMage.screengen.base.ScreenImageEnhancement;
-import org.iMage.screengen.positions.CenterPosition;
-import org.iMage.screengen.positions.LowerCenterPosition;
 import org.iMage.screengen.positions.UpperRightCornerPosition;
 
-import java.awt.Color;
 import java.awt.Point;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -68,18 +65,5 @@ public class ParallelBackgroundEnhancement extends ParallelProcessing implements
             ie.printStackTrace();
         }
         return null;
-    }
-
-    public static void main(String[] args) {
-        ScreenImage image = new BufferedScreenImage(ImageUtils.getImageViaFileChooser());
-        ScreenImage bg = new BufferedScreenImage(ImageUtils.getImageViaFileChooser());
-        BackgroundEnhancement bge = new BackgroundEnhancement(bg, new UpperRightCornerPosition());
-        ParallelBackgroundEnhancement enhancement = new ParallelBackgroundEnhancement(bge);
-        try {
-            bge.enhance(image).save("C:\\Users\\David\\Desktop\\result_single.png");
-            enhancement.enhance(image).save("C:\\Users\\David\\Desktop\\result_parallel.png");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }
