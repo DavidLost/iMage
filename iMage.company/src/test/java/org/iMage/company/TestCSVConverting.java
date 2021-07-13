@@ -1,7 +1,6 @@
 package org.iMage.company;
 
 import org.iMage.company.csv.CompanyCSVReader;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
