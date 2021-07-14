@@ -11,9 +11,16 @@ import org.junit.jupiter.api.Test;
 import javax.imageio.ImageIO;
 import java.awt.Color;
 import java.io.IOException;
+import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/**
+ * Test-class for the implementations of the parallelized processes from screengen.
+ *
+ * @author David Rösler (KIT)
+ * @version 1.0
+ */
 public class ScreenGenParallelTest {
 
     public static final String TEST_IMAGE = "/donald.jpg";
@@ -30,8 +37,10 @@ public class ScreenGenParallelTest {
     @BeforeEach
     void setUp() {
         try {
-            testImage = new BufferedScreenImage(ImageIO.read(this.getClass().getResource(TEST_IMAGE)));
-            testBackround = new BufferedScreenImage(ImageIO.read(this.getClass().getResource(TEST_BACKGROUND)));
+            testImage = new BufferedScreenImage(ImageIO.read(
+                    Objects.requireNonNull(this.getClass().getResource(TEST_IMAGE))));
+            testBackround = new BufferedScreenImage(ImageIO.read(
+                    Objects.requireNonNull(this.getClass().getResource(TEST_BACKGROUND))));
         } catch (IOException e) {
             e.printStackTrace();
         }

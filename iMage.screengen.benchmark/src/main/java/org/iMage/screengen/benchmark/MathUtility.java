@@ -1,5 +1,7 @@
 package org.iMage.screengen.benchmark;
 
+import java.util.Arrays;
+
 /**
  * The {@link MathUtility} class provides stochastic helper methods.
  *
@@ -22,7 +24,11 @@ public final class MathUtility {
    * @return mean value
    */
   public static double calculateMean(long[] data) {
-    throw new RuntimeException("to be implemented");
+    double mean = 0;
+    for (long d : data) {
+      mean += d;
+    }
+    return mean / data.length;
   }
 
   /**
@@ -33,7 +39,13 @@ public final class MathUtility {
    * @return standard deviation
    */
   public static double calculateStandardDeviation(long[] data) {
-    throw new RuntimeException("to be implemented");
+    double mean = calculateMean(data);
+    double sum = 0;
+    for (long d : data) {
+      sum += Math.pow(d - mean, 2);
+    }
+    double factor = 1.0 / (data.length - 1);
+    return Math.sqrt(factor * sum);
   }
 
   /**
@@ -45,6 +57,15 @@ public final class MathUtility {
    * if the array has less than 3 elements.
    */
   public static long[] removeMinMax(long[] data) {
-    throw new RuntimeException("to be implemented");
+    if (data.length < 3) return data;
+    long[] newData = new long[data.length - 2];
+    System.arraycopy(Arrays.stream(data).sorted().toArray(), 1, newData, 0, data.length - 2);
+    return newData;
   }
+
+  public static void main(String[] args) {
+    long[] test = new long[] {5,7,9,2,16,4,6,1,8,6,3};
+    System.out.println(Arrays.toString(removeMinMax(test)));
+  }
+
 }

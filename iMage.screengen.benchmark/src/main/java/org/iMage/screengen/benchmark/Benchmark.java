@@ -9,13 +9,15 @@ package org.iMage.screengen.benchmark;
  */
 public class Benchmark {
 
+  private final Runnable runnable;
+
   /**
    * Create a new benchmark with a runnable.
    *
    * @param runnable runnable that will be measured
    */
   public Benchmark(Runnable runnable) {
-    throw new RuntimeException("to be implemented");
+    this.runnable = runnable;
   }
 
   /**
@@ -28,6 +30,15 @@ public class Benchmark {
    * @see MathUtility
    */
   public Measurement run(int iterations) {
-    throw new RuntimeException("to be implemented");
+    long[] times = new long[iterations];
+    long start = System.currentTimeMillis();
+    for (int i = 0; i < iterations; i++) {
+      runnable.run();
+      times[i] = System.currentTimeMillis() - start;
+      start = System.currentTimeMillis();
+    }
+    long[] medianTimes = MathUtility.removeMinMax(times);
+    return new Measurement(iterations, MathUtility.calculateMean(medianTimes),
+            MathUtility.calculateStandardDeviation(medianTimes));
   }
 }

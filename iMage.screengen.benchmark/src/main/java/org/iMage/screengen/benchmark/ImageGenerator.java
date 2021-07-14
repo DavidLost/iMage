@@ -5,7 +5,6 @@ import org.iMage.screengen.base.ScreenImage;
 
 import java.awt.Color;
 import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * The {@link ImageGenerator} generates random images that can be used to evaluate the processes.
@@ -69,8 +68,11 @@ public class ImageGenerator {
     ScreenImage rndImage = new BufferedScreenImage(width, height);
     for (int x = 0; x < width; x++) {
       for (int y = 0; y < height; y++) {
-        Color color = new Color(rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
-        rndImage.setColor(x, y, color.getRGB());
+        int r = rnd.nextInt(RGBA_BOUNDARY);
+        int g = rnd.nextInt(RGBA_BOUNDARY);
+        int b = rnd.nextInt(RGBA_BOUNDARY);
+        int a = rnd.nextInt(RGBA_BOUNDARY);
+        rndImage.setColor(x, y, new Color(r, g, b, a).getRGB());
       }
     }
     return rndImage;

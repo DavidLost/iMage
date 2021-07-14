@@ -1,21 +1,28 @@
 package org.iMage.screengen.parallel;
 
-import org.iMage.iGen.utils.ImageUtils;
 import org.iMage.screengen.AbstractBackgroundEnhancement;
 import org.iMage.screengen.BackgroundEnhancement;
-import org.iMage.screengen.base.BufferedScreenImage;
 import org.iMage.screengen.base.ScreenImage;
 import org.iMage.screengen.base.ScreenImageEnhancement;
-import org.iMage.screengen.positions.UpperRightCornerPosition;
 
 import java.awt.Point;
-import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Multithreading version of {@link BackgroundEnhancement}
+ *
+ * @author David Rösler (KIT)
+ * @version 1.0
+ */
 public class ParallelBackgroundEnhancement extends ParallelProcessing implements ScreenImageEnhancement {
 
     private final AbstractBackgroundEnhancement enhancement;
 
+    /**
+     *
+     * @param enhancement is a given AbstractBackgroundEnhancement
+     * @param threadCount is the amount of threads used to do the processing
+     */
     public ParallelBackgroundEnhancement(AbstractBackgroundEnhancement enhancement, int threadCount) {
         super(threadCount);
         this.enhancement = enhancement;
@@ -25,6 +32,14 @@ public class ParallelBackgroundEnhancement extends ParallelProcessing implements
         this(enhancement, Runtime.getRuntime().availableProcessors());
     }
 
+    /**
+     * This multithreading-optimized enhance-method, first crops the part of the background-image, which will
+     * overlay with the foreground. Then the foreground and background-part are cut into vertical pieces, then
+     * processed on top of each other. After that, they get recombined and put ontop of the background-image.
+     *
+     * @param foreground is the foreground image
+     * @return the enhanced image
+     */
     @Override
     public ScreenImage enhance(ScreenImage foreground) {
         
@@ -41,18 +56,18 @@ public class ParallelBackgroundEnhancement extends ParallelProcessing implements
         
         Point start = enhancement.getPosition().calculateCorner(background, scaledForeground);
         ScreenImage enhancedBgPart = background.getSubImage(start.x, start.y, scaledForeground.getWidth(), scaledForeground.getHeight());
-        int subWidth = (int) Math.ceil((double) scaledForeground.getWidth() / threadCount);
+        int subWidth = scaledForeground.getWidth() / threadCount;
         ScreenImage[] fgSubImages = getSubImages(scaledForeground, subWidth);
         ScreenImage[] bgSubImages = getSubImages(enhancedBgPart, subWidth);
         
         SubImageEnhancementProcessor[] tasks = new SubImageEnhancementProcessor[fgSubImages.length];
-        for (int i = 0; i < threadCount; i++) {
+        for (int i = 0; i < tasks.length; i++) {
             tasks[i] = new SubImageEnhancementProcessor(fgSubImages[i], enhancement, bgSubImages[i]);
             threadPoolExecutor.execute(tasks[i]);
         }
         threadPoolExecutor.shutdown();
         try {
-            if (threadPoolExecutor.awaitTermination(30, TimeUnit.SECONDS)) {
+            if (threadPoolExecutor.awaitTermination(3, TimeUnit.MINUTES)) {
                 enhancedBgPart = combineSubImages(tasks, enhancedBgPart.copy(), subWidth);
                 for (int x = 0; x < enhancedBgPart.getWidth(); x++) {
                     for (int y = 0; y < enhancedBgPart.getHeight(); y++) {
